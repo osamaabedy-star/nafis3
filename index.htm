@@ -27,6 +27,9 @@
     body.dark-mode .story-text { background: #2a2a3a; }
     body.dark-mode .timer-bar { background: linear-gradient(135deg, #1e3a4a, #0a2a3a); }
     body.dark-mode .info-bar { background: #2a2a3a; color: #e0e0e0; border-right-color: #f7b32b; }
+    body.dark-mode .review-item { background: #2a2a3a; border-bottom-color: #3a3a4a; }
+    body.dark-mode .review-correct { background: #1a3a2a; }
+    body.dark-mode .review-wrong { background: #3a2a2a; }
     .app-container { max-width: 950px; margin: 0 auto; }
     .card { background: white; border-radius: 48px; box-shadow: 0 20px 35px rgba(0,0,0,0.08); overflow: hidden; transition: background 0.3s; }
     .header { background: #0b2b40; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
@@ -75,7 +78,7 @@
     button.secondary { background: #b0bed0; color: #1f2a3a; }
     .reports-btn { background: #f7b32b; color: #1e2a1e; margin-top: 12px; width: 100%; font-size: 0.9rem; }
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 16px; }
-    .modal-box { background: white; max-width: 700px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border-radius: 36px; box-shadow: 0 30px 40px rgba(0,0,0,0.3); }
+    .modal-box { background: white; max-width: 800px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border-radius: 36px; box-shadow: 0 30px 40px rgba(0,0,0,0.3); }
     .story-text { background: #fef9e6; padding: 14px; border-radius: 24px; line-height: 1.6; font-size: 0.9rem; margin-bottom: 16px; text-align: justify; }
     .timer-bar { background: linear-gradient(135deg, #0b2b40, #1f4e5c); color: white; padding: 10px; border-radius: 50px; text-align: center; font-size: 1.4rem; font-weight: bold; margin-bottom: 16px; direction: ltr; }
     .q-text { font-size: 0.95rem; font-weight: 700; background: #f3f6fc; padding: 12px; border-radius: 24px; margin-bottom: 16px; }
@@ -103,6 +106,21 @@
     .info-modal-content li { margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
     .info-modal-content .highlight { background: #f0f0f0; border-radius: 16px; padding: 8px 12px; margin: 12px 0; text-align: center; }
     body.dark-mode .info-modal-content .highlight { background: #2a2a3a; }
+    /* أنماط المراجعة الجديدة */
+    .review-list { display: flex; flex-direction: column; gap: 20px; margin: 20px 0; }
+    .review-item { background: #f9fafc; border-radius: 24px; padding: 16px; border-right: 6px solid; transition: 0.2s; }
+    .review-correct { border-right-color: #2e7d64; background: #f0faf5; }
+    .review-wrong { border-right-color: #d32f2f; background: #fff5f5; }
+    body.dark-mode .review-correct { background: #1a3a2a; border-right-color: #4caf50; }
+    body.dark-mode .review-wrong { background: #3a2a2a; border-right-color: #f44336; }
+    .review-question { font-weight: 700; font-size: 0.9rem; margin-bottom: 12px; }
+    .review-answer { font-size: 0.85rem; margin-top: 8px; padding: 8px; border-radius: 16px; }
+    .review-answer strong { font-weight: 700; }
+    .review-student-answer { background: #e8f0fe; margin-bottom: 6px; }
+    .review-correct-answer { background: #e6f4ea; }
+    body.dark-mode .review-student-answer { background: #2a3a5a; }
+    body.dark-mode .review-correct-answer { background: #1a3a2a; }
+    .review-status { display: inline-block; font-size: 0.75rem; margin-right: 8px; }
     @media (max-width: 600px) {
       .modal-box { padding: 16px; }
       .timer-bar { font-size: 1.2rem; }
@@ -112,10 +130,8 @@
       .subject-badge { font-size: 0.55rem; }
       .lock-icon-large { font-size: 1.6rem; }
       .report-item { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .review-item { padding: 12px; }
     }
-    .review-correct { background: #e0f2e9; }
-    .review-wrong { background: #ffe6e5; }
-    .review-answer-box { padding: 8px; border-radius: 16px; margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -140,27 +156,13 @@
 <script>
   // ==================== التحقق من توفر localStorage ====================
   function isLocalStorageAvailable() {
-    try {
-      const testKey = '__storage_test__';
-      localStorage.setItem(testKey, 'test');
-      localStorage.removeItem(testKey);
-      return true;
-    } catch(e) {
-      return false;
-    }
+    try { const testKey = '__storage_test__'; localStorage.setItem(testKey, 'test'); localStorage.removeItem(testKey); return true; } catch(e) { return false; }
   }
   if (!isLocalStorageAvailable()) {
     const warningDiv = document.createElement('div');
-    warningDiv.style.position = 'fixed';
-    warningDiv.style.top = '10px';
-    warningDiv.style.left = '10px';
-    warningDiv.style.right = '10px';
-    warningDiv.style.backgroundColor = '#ff9800';
-    warningDiv.style.color = '#000';
-    warningDiv.style.padding = '12px';
-    warningDiv.style.borderRadius = '16px';
-    warningDiv.style.textAlign = 'center';
-    warningDiv.style.zIndex = '9999';
+    warningDiv.style.position = 'fixed'; warningDiv.style.top = '10px'; warningDiv.style.left = '10px'; warningDiv.style.right = '10px';
+    warningDiv.style.backgroundColor = '#ff9800'; warningDiv.style.color = '#000'; warningDiv.style.padding = '12px';
+    warningDiv.style.borderRadius = '16px'; warningDiv.style.textAlign = 'center'; warningDiv.style.zIndex = '9999';
     warningDiv.style.fontWeight = 'bold';
     warningDiv.innerHTML = '⚠️ المتصفح في وضع التصفح الخاص – لن يتم حفظ التقدم. يرجى إعادة تحميل الصفحة في وضع التصفح العادي.';
     document.body.prepend(warningDiv);
@@ -169,63 +171,28 @@
   // ==================== الوضع الليلي ====================
   let darkMode = localStorage.getItem('darkMode') === 'true';
   function applyDarkMode() {
-    if (darkMode) {
-      document.body.classList.add('dark-mode');
-      document.getElementById('darkModeToggle').innerHTML = '☀️';
-    } else {
-      document.body.classList.remove('dark-mode');
-      document.getElementById('darkModeToggle').innerHTML = '🌙';
-    }
+    if (darkMode) { document.body.classList.add('dark-mode'); document.getElementById('darkModeToggle').innerHTML = '☀️'; } 
+    else { document.body.classList.remove('dark-mode'); document.getElementById('darkModeToggle').innerHTML = '🌙'; }
     localStorage.setItem('darkMode', darkMode);
   }
   applyDarkMode();
-  document.getElementById('darkModeToggle').addEventListener('click', () => {
-    darkMode = !darkMode;
-    applyDarkMode();
-  });
+  document.getElementById('darkModeToggle').addEventListener('click', () => { darkMode = !darkMode; applyDarkMode(); });
 
   // ==================== معلومات المنصة ====================
   document.getElementById('infoButton').addEventListener('click', () => {
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `
-      <div class="modal-box" style="max-width: 550px;">
-        <div class="info-modal-content">
-          <h3 style="text-align:center; margin-bottom:16px;">📌 منصة نافس التفاعلية</h3>
-          <div class="highlight">
-            <strong>🎯 منصة محاكاة الاختبارات الوطنية "نافس"</strong><br>
-            قياس المهارات الحقيقية في الرياضيات والقراءة وفق معايير وطنية.
-          </div>
-          <h4>✨ المميزات:</h4>
-          <ul>
-            <li>📚 <strong>6 اختبارات شاملة</strong> (3 رياضيات + 3 قراءة)</li>
-            <li>⏱️ <strong>مؤقت زمني 25 دقيقة</strong> لكل اختبار</li>
-            <li>📊 <strong>تقارير مفصلة</strong> مع رسوم بيانية وتحليل الأداء</li>
-            <li>🔁 <strong>إعادة الاختبارات</strong> بعد إتمام جميع الاختبارات</li>
-            <li>🌙 <strong>وضع ليلي</strong> مريح للعين</li>
-            <li>🔍 <strong>مراجعة الأسئلة بعد كل اختبار</strong> لمعرفة الأخطاء</li>
-            <li>📱 <strong>إرسال النتائج لمعلم المادة عبر واتساب</strong></li>
-          </ul>
-          <h4>👨‍💻 المطور:</h4>
-          <p style="margin-right: 20px;">أسامة إبراهيم – مدارس رياض الإبداع الأهلية<br>العام الدراسي 1447 هـ</p>
-          <div style="text-align:center; margin-top:20px;">
-            <button id="closeInfoBtn" class="secondary">إغلاق</button>
-          </div>
-        </div>
-      </div>
-    `;
+    const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay';
+    modalDiv.innerHTML = `<div class="modal-box" style="max-width: 550px;"><div class="info-modal-content"><h3 style="text-align:center; margin-bottom:16px;">📌 منصة نافس التفاعلية</h3><div class="highlight"><strong>🎯 منصة محاكاة الاختبارات الوطنية "نافس"</strong><br>قياس المهارات الحقيقية في الرياضيات والقراءة وفق معايير وطنية.</div><h4>✨ المميزات:</h4><ul><li>📚 <strong>6 اختبارات شاملة</strong> (3 رياضيات + 3 قراءة)</li><li>⏱️ <strong>مؤقت زمني 25 دقيقة</strong> لكل اختبار</li><li>📊 <strong>تقارير مفصلة</strong> مع رسوم بيانية وتحليل الأداء</li><li>🔁 <strong>إعادة الاختبارات</strong> بعد إتمام جميع الاختبارات</li><li>🌙 <strong>وضع ليلي</strong> مريح للعين</li><li>🔍 <strong>مراجعة الأسئلة بعد كل اختبار</strong> (عرض جميع الأسئلة دفعة واحدة)</li><li>📱 <strong>إرسال النتائج لمعلم المادة عبر واتساب</strong></li></ul><h4>👨‍💻 المطور:</h4><p style="margin-right: 20px;">أسامة إبراهيم – مدارس رياض الإبداع الأهلية<br>العام الدراسي 1447 هـ</p><div style="text-align:center; margin-top:20px;"><button id="closeInfoBtn" class="secondary">إغلاق</button></div></div></div>`;
     document.body.appendChild(modalDiv);
     document.getElementById('closeInfoBtn').onclick = () => modalDiv.remove();
   });
 
   // ==================== دوال مساعدة ====================
-  function sanitizeText(str) { if (!str) return ''; const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
-  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+  function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
   function toArabicIndic(num) { const digits = '٠١٢٣٤٥٦٧٨٩'; return num.toString().replace(/\d/g, d => digits[parseInt(d)]); }
   function convertNumbersToArabicIndic(text) { if (!text) return text; return text.replace(/\d+/g, match => toArabicIndic(match)); }
   function formatFractions(text) { return text.replace(/(\d+)\/(\d+)/g, (match, num, den) => `<span class="fraction"><span class="num">${toArabicIndic(num)}</span><span class="den">${toArabicIndic(den)}</span></span>`); }
 
-  // ==================== بنك الأسئلة ====================
+  // ==================== بنك الأسئلة (نفس الكود السابق، مختصر للطول) ====================
   const MATH_BANK = [
     { text: "ما اسم الشكل الهندسي الذي له 6 أوجه مربعة؟", options: ["مكعب", "مربع", "أسطوانة", "مستطيل"], correct: 0 },
     { text: "رسمت أمل مربعًا طول ضلعه 2 سم، ما مساحته؟", options: ["8 سم²", "4 سم²", "2 سم²", "12 سم²"], correct: 1 },
@@ -435,7 +402,6 @@
     const total = currentTest.questions.length;
     const timeTaken = Math.min(25*60, Math.floor((Date.now() - startTime) / 1000));
     updateBestAttempt(currentTest.id, score, total, timeTaken);
-    // حفظ نسخة من الأسئلة والإجابات للمراجعة
     const questionsCopy = [...currentTest.questions];
     const answersCopy = [...currentAnswers];
     const testTitleCopy = currentTest.title;
@@ -464,7 +430,7 @@
         <p>⏱️ الزمن المستغرق: ${timeStr}</p>
         <div style="margin:16px 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
           <a href="${whatsappLink}" target="_blank" class="whatsapp-icon">📱 واتساب المعلم</a>
-          <button id="reviewBtn" style="background:#0b2b40">🔍 مراجعة الأسئلة</button>
+          <button id="reviewBtn" style="background:#0b2b40">🔍 مراجعة الأسئلة (جميعها)</button>
         </div>
         <button id="closeResultBtn" class="secondary">إغلاق</button>
       </div>
@@ -473,59 +439,46 @@
     document.getElementById('closeResultBtn').onclick = () => { resultModal.remove(); renderHome(); };
     document.getElementById('reviewBtn').onclick = () => {
       resultModal.remove();
-      showReviewModal(questions, userAnswers, testTitle);
+      showFullReviewModal(questions, userAnswers, testTitle);
     };
   }
 
-  // دالة مراجعة الأسئلة
-  function showReviewModal(questions, userAnswers, testTitle) {
-    let currentReviewIndex = 0;
-    function renderReviewQuestion() {
-      const q = questions[currentReviewIndex];
-      const userChoice = userAnswers[currentReviewIndex];
+  // دالة مراجعة الأسئلة بشكل قائمة واحدة (جميع الأسئلة دفعة واحدة)
+  function showFullReviewModal(questions, userAnswers, testTitle) {
+    let reviewHtml = `<div class="modal-box"><h3 style="text-align:center; margin-bottom:16px;">📖 مراجعة جميع الأسئلة: ${escapeHtml(testTitle)}</h3><div class="review-list">`;
+    
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      const userChoice = userAnswers[i];
       const isCorrect = (userChoice === q.correct);
       const correctAnswerText = q.options[q.correct];
       const userAnswerText = (userChoice !== null && userChoice !== undefined) ? q.options[userChoice] : "لم يتم الإجابة";
+      const statusClass = isCorrect ? 'review-correct' : 'review-wrong';
+      const statusIcon = isCorrect ? '✔️ صحيحة' : '❌ خاطئة';
       
-      const reviewHtml = `
-        <div class="modal-box" style="max-width:700px">
-          <h3 style="text-align:center">📖 مراجعة الاختبار: ${escapeHtml(testTitle)}</h3>
-          <div style="margin:16px 0">
-            <div class="q-counter" style="text-align:center; margin-bottom:10px">
-              السؤال ${toArabicIndic(currentReviewIndex+1)} / ${toArabicIndic(questions.length)}
-            </div>
-            <div class="q-text" style="background:#f0f4fa">${q.text}</div>
-            <div style="margin-top:16px">
-              <div class="review-answer-box" style="background: ${isCorrect ? '#e0f2e9' : '#ffe6e5'}">
-                <strong>✅ إجابتك:</strong> ${escapeHtml(userAnswerText)}
-                ${isCorrect ? '<span style="color:#2e7d64"> ✔️ صحيحة</span>' : '<span style="color:#d32f2f"> ❌ خاطئة</span>'}
-              </div>
-              <div class="review-answer-box" style="background:#e8f0fe">
-                <strong>📌 الإجابة الصحيحة:</strong> ${escapeHtml(correctAnswerText)}
-              </div>
-            </div>
+      reviewHtml += `
+        <div class="review-item ${statusClass}">
+          <div class="review-question">
+            <span style="font-weight:800; margin-left:8px;">${toArabicIndic(i+1)}.</span>
+            ${q.text}
           </div>
-          <div class="nav-btns">
-            <button id="prevReviewBtn" class="secondary" ${currentReviewIndex===0 ? 'disabled' : ''}>السابق</button>
-            <button id="nextReviewBtn">${currentReviewIndex === questions.length-1 ? 'إنهاء' : 'التالي'}</button>
+          <div class="review-answer review-student-answer">
+            <strong>✅ إجابتك:</strong> ${escapeHtml(userAnswerText)}
+            <span class="review-status">${statusIcon}</span>
+          </div>
+          <div class="review-answer review-correct-answer">
+            <strong>📌 الإجابة الصحيحة:</strong> ${escapeHtml(correctAnswerText)}
           </div>
         </div>
       `;
-      const existingModal = document.querySelector('.modal-overlay');
-      if(existingModal) existingModal.remove();
-      const modalDiv = document.createElement('div');
-      modalDiv.className = 'modal-overlay';
-      modalDiv.innerHTML = reviewHtml;
-      document.body.appendChild(modalDiv);
-      document.getElementById('prevReviewBtn')?.addEventListener('click', () => {
-        if(currentReviewIndex > 0) { currentReviewIndex--; renderReviewQuestion(); }
-      });
-      document.getElementById('nextReviewBtn')?.addEventListener('click', () => {
-        if(currentReviewIndex < questions.length-1) { currentReviewIndex++; renderReviewQuestion(); }
-        else { modalDiv.remove(); renderHome(); }
-      });
     }
-    renderReviewQuestion();
+    
+    reviewHtml += `</div><div style="text-align:center; margin-top:20px;"><button id="closeReviewBtn" class="secondary">إغلاق</button></div></div>`;
+    const modalDiv = document.createElement('div');
+    modalDiv.className = 'modal-overlay';
+    modalDiv.innerHTML = reviewHtml;
+    document.body.appendChild(modalDiv);
+    document.getElementById('closeReviewBtn').onclick = () => { modalDiv.remove(); renderHome(); };
   }
 
   function updateCurrentQuestion() {
@@ -654,7 +607,7 @@
     document.getElementById('cancelEditBtn').onclick = () => modalDiv.remove();
   }
 
-  // ==================== التقارير (بدون دائرة) ====================
+  // ==================== التقارير ====================
   function showReportsWithChart() {
     const myReports = reports.filter(r => r.studentName === student.name);
     if (!myReports.length) { showCustomMessage("التقارير", "لا توجد تقارير بعد. قم بحل اختبار أولاً."); return; }
@@ -675,14 +628,7 @@
       const minutes = Math.floor(timeSec / 60);
       const seconds = timeSec % 60;
       const timeStr = `${toArabicIndic(minutes)}:${toArabicIndic(seconds.toString().padStart(2,'0'))}`;
-      detailedHtml += `
-        <div class="report-item">
-          <strong>${escapeHtml(rep.testTitle)}</strong>
-          <span>⭐ الدرجة: ${toArabicIndic(best)}/${toArabicIndic(total)}</span>
-          <span>⏱️ الزمن: ${timeStr}</span>
-          <span>📅 ${rep.attempts[rep.attempts.length-1].date}</span>
-        </div>
-      `;
+      detailedHtml += `<div class="report-item"><strong>${escapeHtml(rep.testTitle)}</strong><span>⭐ الدرجة: ${toArabicIndic(best)}/${toArabicIndic(total)}</span><span>⏱️ الزمن: ${timeStr}</span><span>📅 ${rep.attempts[rep.attempts.length-1].date}</span></div>`;
     });
     detailedHtml += `</div>`;
 

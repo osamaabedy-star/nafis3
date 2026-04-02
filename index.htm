@@ -3,69 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net https://www.wzufa.com; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self';">
   <title>مدارس رياض الإبداع | الاختبارات الوطنية نافس</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Tahoma', 'Cairo', system-ui, sans-serif; }
-    body { background: linear-gradient(145deg, #eef2f7 0%, #dce3ec 100%); min-height: 100vh; padding: 20px 16px; }
+    body { background: linear-gradient(145deg, #eef2f7 0%, #dce3ec 100%); min-height: 100vh; padding: 20px 16px; transition: background 0.3s, color 0.3s; }
+    body.dark-mode { background: #121212; color: #e0e0e0; }
+    body.dark-mode .card { background: #1e1e2f; box-shadow: 0 20px 35px rgba(0,0,0,0.3); }
+    body.dark-mode .header { background: #0a1a24; }
+    body.dark-mode .student-badge { background: #2c4b5a; }
+    body.dark-mode .test-card { background: #2a2a3a; border-color: #3a3a4a; }
+    body.dark-mode .test-card.math-1, body.dark-mode .test-card.math-2, body.dark-mode .test-card.math-3,
+    body.dark-mode .test-card.reading-1, body.dark-mode .test-card.reading-2, body.dark-mode .test-card.reading-3 {
+      background: #2a2a3a;
+      border-right-color: #1E88E5;
+    }
+    body.dark-mode .opt { background: #2a2a3a; border-color: #3a3a4a; color: #e0e0e0; }
+    body.dark-mode .opt.selected { background: #1e4a3a; border-color: #2e7d64; }
+    body.dark-mode .q-text { background: #2a2a3a; }
+    body.dark-mode .report-card { background: #2a2a3a; }
+    body.dark-mode .modal-box { background: #1e1e2f; color: #e0e0e0; }
+    body.dark-mode .story-text { background: #2a2a3a; }
+    body.dark-mode .timer-bar { background: linear-gradient(135deg, #1e3a4a, #0a2a3a); }
+    body.dark-mode .info-bar { background: #2a2a3a; color: #e0e0e0; border-right-color: #f7b32b; }
     .app-container { max-width: 950px; margin: 0 auto; }
-    .card { background: white; border-radius: 48px; box-shadow: 0 20px 35px rgba(0,0,0,0.08); overflow: hidden; }
-    .header { background: #0b2b40; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-    .logo-area { display: flex; align-items: center; gap: 12px; }
-    .logo-img { height: 55px; width: auto; border-radius: 16px; background: white; padding: 4px 8px; }
-    .logo-text { color: white; font-weight: 800; font-size: 1.2rem; }
-    .student-badge { background: #1f4e5c; padding: 6px 16px; border-radius: 60px; color: white; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
-    .student-badge:hover { background: #2e6b7c; transform: scale(1.02); }
-    .main-content { padding: 24px; }
-    .user-form { background: #f8fafd; border-radius: 32px; padding: 20px; margin-bottom: 28px; display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
-    .input-group { flex: 1; min-width: 140px; }
-    .input-group label { font-size: 0.75rem; font-weight: 600; color: #2c5a6e; margin-bottom: 6px; display: block; }
-    .input-group input { width: 100%; padding: 12px 16px; border: 1px solid #cbdbe2; border-radius: 40px; font-size: 0.9rem; }
-    .save-btn { background: #0b2b40; color: white; border: none; padding: 12px 28px; border-radius: 40px; font-weight: bold; cursor: pointer; }
-    .tests-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin: 20px 0; }
-    .test-card { border-radius: 32px; padding: 20px 12px; text-align: center; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 8px 16px rgba(0,0,0,0.05); background: white; border: 1px solid rgba(0,0,0,0.05); }
-    .test-card.disabled { opacity: 0.6; filter: grayscale(0.1); cursor: not-allowed; pointer-events: none; }
-    .test-card:hover:not(.disabled) { transform: translateY(-6px); box-shadow: 0 16px 24px rgba(0,0,0,0.1); }
-    .test-card.math-1 { background: linear-gradient(135deg, #E8F0FE, #D9E6FF); border-right: 8px solid #1E88E5; }
-    .test-card.math-2 { background: linear-gradient(135deg, #E0F7FA, #B2EBF2); border-right: 8px solid #00ACC1; }
-    .test-card.math-3 { background: linear-gradient(135deg, #F3E5F5, #E1BEE7); border-right: 8px solid #8E24AA; }
-    .test-card.reading-1 { background: linear-gradient(135deg, #FFF8E7, #FFE9BF); border-right: 8px solid #F9A825; }
-    .test-card.reading-2 { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); border-right: 8px solid #43A047; }
-    .test-card.reading-3 { background: linear-gradient(135deg, #FFEBEE, #FFCDD2); border-right: 8px solid #E53935; }
-    .test-icon { font-size: 2.5rem; margin-bottom: 8px; }
-    .test-title { font-weight: 800; font-size: 1rem; margin: 8px 0; }
-    .subject-badge { display: inline-block; border-radius: 30px; padding: 4px 12px; font-size: 0.7rem; margin-top: 8px; background: rgba(0,0,0,0.05); }
-    button { background: #0b2b40; border: none; padding: 10px 24px; border-radius: 60px; color: white; font-weight: bold; cursor: pointer; }
+    .card { background: white; border-radius: 48px; box-shadow: 0 20px 35px rgba(0,0,0,0.08); overflow: hidden; transition: background 0.3s; }
+    .header { background: #0b2b40; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .logo-area { display: flex; align-items: center; gap: 10px; }
+    .logo-img { height: 45px; width: auto; border-radius: 12px; background: white; padding: 2px 6px; }
+    .logo-text { color: white; font-weight: 800; font-size: 1rem; }
+    .student-badge { background: #1f4e5c; padding: 4px 12px; border-radius: 40px; color: white; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+    .student-badge:hover { background: #2e6b7c; }
+    .dark-toggle { background: #3a6b7c; border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .dark-toggle:hover { background: #4e8c9e; transform: scale(1.05); }
+    .info-button { background: #f7b32b; color: #1e2a1e; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .info-button:hover { background: #ffc44d; transform: scale(1.05) rotate(2deg); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+    .main-content { padding: 20px; }
+    .user-form { background: #f8fafd; border-radius: 32px; padding: 16px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+    body.dark-mode .user-form { background: #2a2a3a; }
+    .input-group { flex: 1; min-width: 120px; }
+    .input-group label { font-size: 0.7rem; font-weight: 600; color: #2c5a6e; margin-bottom: 4px; display: block; }
+    body.dark-mode .input-group label { color: #9bb8c9; }
+    .input-group input { width: 100%; padding: 10px 14px; border: 1px solid #cbdbe2; border-radius: 40px; font-size: 0.85rem; background: white; }
+    body.dark-mode .input-group input { background: #2a2a3a; border-color: #3a3a4a; color: #e0e0e0; }
+    .save-btn { background: #0b2b40; color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: bold; cursor: pointer; }
+    .tests-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
+    .test-card { border-radius: 28px; padding: 8px 6px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.08); background: white; border: none; position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .test-card.disabled { opacity: 0.7; filter: grayscale(0.1); cursor: not-allowed; pointer-events: none; background: #e9ecef; }
+    body.dark-mode .test-card.disabled { background: #3a3a4a; }
+    .test-card.completed { border: 1px solid #2e7d64; }
+    .test-card:hover:not(.disabled) { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.12); }
+    .test-card.math-1 { background: linear-gradient(135deg, #E8F0FE, #D9E6FF); border-right: 4px solid #1E88E5; }
+    .test-card.math-2 { background: linear-gradient(135deg, #E0F7FA, #B2EBF2); border-right: 4px solid #00ACC1; }
+    .test-card.math-3 { background: linear-gradient(135deg, #F3E5F5, #E1BEE7); border-right: 4px solid #8E24AA; }
+    .test-card.reading-1 { background: linear-gradient(135deg, #FFF8E7, #FFE9BF); border-right: 4px solid #F9A825; }
+    .test-card.reading-2 { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); border-right: 4px solid #43A047; }
+    .test-card.reading-3 { background: linear-gradient(135deg, #FFEBEE, #FFCDD2); border-right: 4px solid #E53935; }
+    body.dark-mode .test-card.math-1, body.dark-mode .test-card.math-2, body.dark-mode .test-card.math-3,
+    body.dark-mode .test-card.reading-1, body.dark-mode .test-card.reading-2, body.dark-mode .test-card.reading-3 {
+      background: #2a2a3a;
+      border-right-color: #1E88E5;
+    }
+    .test-icon { font-size: 1.6rem; margin-bottom: 2px; }
+    .test-title { font-weight: 700; font-size: 0.75rem; margin: 2px 0; }
+    .subject-badge { display: inline-block; border-radius: 30px; padding: 2px 6px; font-size: 0.6rem; margin-top: 2px; background: rgba(0,0,0,0.05); }
+    .test-score { font-size: 0.65rem; font-weight: bold; color: #2e7d64; margin-top: 3px; }
+    .lock-icon-large { font-size: 1.8rem; margin-bottom: 4px; display: block; }
+    button { background: #0b2b40; border: none; padding: 8px 16px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button:hover { opacity: 0.9; transform: scale(1.02); }
     button.secondary { background: #b0bed0; color: #1f2a3a; }
-    .reports-btn { background: #f7b32b; color: #1e2a1e; margin-top: 12px; width: 100%; font-size: 1rem; }
+    .reports-btn { background: #f7b32b; color: #1e2a1e; margin-top: 12px; width: 100%; font-size: 0.9rem; }
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 16px; }
-    .modal-box { background: white; max-width: 750px; width: 100%; max-height: 85vh; border-radius: 48px; overflow-y: auto; padding: 28px; box-shadow: 0 30px 40px rgba(0,0,0,0.3); }
-    .story-text { background: #fef9e6; padding: 20px; border-radius: 32px; line-height: 1.8; font-size: 1rem; margin-bottom: 20px; text-align: justify; }
-    .timer-bar { background: linear-gradient(135deg, #0b2b40, #1f4e5c); color: white; padding: 16px; border-radius: 60px; text-align: center; font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; direction: ltr; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-    .q-text { font-size: 1.1rem; font-weight: 700; background: #f3f6fc; padding: 16px; border-radius: 28px; margin-bottom: 20px; }
-    .options { display: flex; flex-direction: column; gap: 12px; }
-    .opt { background: #f8fafc; padding: 12px 18px; border-radius: 60px; border: 1px solid #e2edf2; cursor: pointer; transition: all 0.1s ease; display: flex; align-items: center; gap: 12px; }
-    .opt.selected { background: #e5f6e5; border-color: #2e7d64; transform: scale(0.99); box-shadow: 0 2px 10px rgba(46,125,100,0.2); }
-    .opt-prefix { font-weight: 800; width: 32px; height: 32px; background: #dee4ec; border-radius: 40px; display: inline-flex; align-items: center; justify-content: center; }
-    .nav-btns { display: flex; justify-content: space-between; margin-top: 28px; gap: 12px; }
-    .big-score { font-size: 3rem; font-weight: 800; color: #0b2b40; margin: 15px 0; }
-    .chart-container { max-width: 100%; margin: 20px 0; height: 280px; position: relative; }
-    .report-card { background: #f8fafd; border-radius: 28px; padding: 18px; margin-bottom: 20px; flex: 1; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.2s; }
-    .report-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-    .flex-row { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
-    .whatsapp-btn { background: #25D366; display: inline-block; padding: 8px 16px; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; margin-top: 10px; }
-    .review-btn { background: #f7b32b; color: #1e2a1e; margin-right: 12px; }
-    .footer { text-align: center; font-size: 0.7rem; padding: 20px; color: #5f7f8f; }
+    .modal-box { background: white; max-width: 700px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border-radius: 36px; box-shadow: 0 30px 40px rgba(0,0,0,0.3); }
+    .story-text { background: #fef9e6; padding: 14px; border-radius: 24px; line-height: 1.6; font-size: 0.9rem; margin-bottom: 16px; text-align: justify; }
+    .timer-bar { background: linear-gradient(135deg, #0b2b40, #1f4e5c); color: white; padding: 10px; border-radius: 50px; text-align: center; font-size: 1.4rem; font-weight: bold; margin-bottom: 16px; direction: ltr; }
+    .q-text { font-size: 0.95rem; font-weight: 700; background: #f3f6fc; padding: 12px; border-radius: 24px; margin-bottom: 16px; }
+    .options { display: flex; flex-direction: column; gap: 8px; }
+    .opt { background: #f8fafc; padding: 8px 12px; border-radius: 50px; border: 1px solid #e2edf2; cursor: pointer; transition: all 0.1s ease; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+    .opt.selected { background: #e5f6e5; border-color: #2e7d64; }
+    .opt-prefix { font-weight: 800; width: 24px; height: 24px; background: #dee4ec; border-radius: 40px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+    .nav-btns { display: flex; justify-content: space-between; margin-top: 20px; gap: 12px; }
+    .big-score { font-size: 2rem; font-weight: 800; color: #0b2b40; margin: 12px 0; }
+    .chart-container { max-width: 100%; margin: 20px 0; height: 260px; position: relative; }
+    .report-card { background: #f8fafd; border-radius: 24px; padding: 12px; margin-bottom: 16px; flex: 1; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    .flex-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+    .whatsapp-icon { background: #25D366; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 40px; color: white; text-decoration: none; font-size: 0.7rem; margin-top: 6px; }
+    .footer { text-align: center; font-size: 0.7rem; padding: 16px; color: #5f7f8f; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 8px; }
+    body.dark-mode .footer { color: #9bb8c9; border-top-color: #3a3a4a; }
     .fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 2px; }
     .fraction .num { border-bottom: 1px solid #000; padding: 0 4px; }
     .fraction .den { padding: 0 4px; }
-    .review-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-    .review-table th, .review-table td { border: 1px solid #ddd; padding: 10px; text-align: right; vertical-align: top; }
-    .review-table th { background: #eef2fa; }
-    .correct-answer { color: #2e7d64; font-weight: bold; }
-    .wrong-answer { color: #c24e2e; }
-    .user-answer { background: #f9f9f9; }
-    .status-icon { font-size: 1.2rem; display: inline-block; width: 24px; }
+    .detailed-reports { margin-top: 20px; border-top: 1px solid #ddd; padding-top: 16px; }
+    .report-item { background: #fff; border-radius: 20px; padding: 8px 12px; margin-bottom: 8px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-size: 0.75rem; }
+    body.dark-mode .report-item { background: #2a2a3a; }
+    .info-modal-content { line-height: 1.6; }
+    .info-modal-content h4 { margin: 12px 0 6px; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+    .info-modal-content ul { margin-right: 20px; margin-bottom: 12px; list-style-type: none; }
+    .info-modal-content li { margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .info-modal-content .highlight { background: #f0f0f0; border-radius: 16px; padding: 8px 12px; margin: 12px 0; text-align: center; }
+    body.dark-mode .info-modal-content .highlight { background: #2a2a3a; }
+    @media (max-width: 600px) {
+      .modal-box { padding: 16px; }
+      .timer-bar { font-size: 1.2rem; }
+      .test-card { padding: 6px 4px; }
+      .test-icon { font-size: 1.4rem; }
+      .test-title { font-size: 0.7rem; }
+      .subject-badge { font-size: 0.55rem; }
+      .lock-icon-large { font-size: 1.6rem; }
+      .report-item { flex-direction: column; align-items: flex-start; gap: 4px; }
+    }
+    .review-correct { background: #e0f2e9; }
+    .review-wrong { background: #ffe6e5; }
+    .review-answer-box { padding: 8px; border-radius: 16px; margin-bottom: 8px; }
   </style>
 </head>
 <body>
@@ -76,27 +126,106 @@
         <img class="logo-img" src="https://www.wzufa.com/wp-content/uploads/2022/07/Riyadh-Al-Ebdaa-Schools.png" alt="شعار مدارس رياض الإبداع" onerror="this.src='https://via.placeholder.com/60?text=RIYADH'">
         <div class="logo-text">مدارس رياض الإبداع</div>
       </div>
-      <div class="student-badge" id="studentBadge">الطالب: غير مسجل</div>
+      <div style="display: flex; gap: 8px;">
+        <button class="info-button" id="infoButton">ℹ️</button>
+        <button class="dark-toggle" id="darkModeToggle">🌙</button>
+        <div class="student-badge" id="studentBadge">الطالب: غير مسجل</div>
+      </div>
     </div>
     <div class="main-content" id="dynamicContent"></div>
-    <div class="footer">الاختبارات الوطنية نافس - قياس المهارات الحقيقية</div>
+    <div class="footer"> اختبارات نافس المحاكية / مدارس رياض الإبداع الأهلية 1447 هـ</div>
   </div>
 </div>
 
 <script>
-  // الأرقام الهندية
-  function toArabicIndic(num) {
-    const digits = '٠١٢٣٤٥٦٧٨٩';
-    return num.toString().replace(/\d/g, d => digits[parseInt(d)]);
+  // ==================== التحقق من توفر localStorage ====================
+  function isLocalStorageAvailable() {
+    try {
+      const testKey = '__storage_test__';
+      localStorage.setItem(testKey, 'test');
+      localStorage.removeItem(testKey);
+      return true;
+    } catch(e) {
+      return false;
+    }
+  }
+  if (!isLocalStorageAvailable()) {
+    const warningDiv = document.createElement('div');
+    warningDiv.style.position = 'fixed';
+    warningDiv.style.top = '10px';
+    warningDiv.style.left = '10px';
+    warningDiv.style.right = '10px';
+    warningDiv.style.backgroundColor = '#ff9800';
+    warningDiv.style.color = '#000';
+    warningDiv.style.padding = '12px';
+    warningDiv.style.borderRadius = '16px';
+    warningDiv.style.textAlign = 'center';
+    warningDiv.style.zIndex = '9999';
+    warningDiv.style.fontWeight = 'bold';
+    warningDiv.innerHTML = '⚠️ المتصفح في وضع التصفح الخاص – لن يتم حفظ التقدم. يرجى إعادة تحميل الصفحة في وضع التصفح العادي.';
+    document.body.prepend(warningDiv);
   }
 
-  function formatFractions(text) {
-    return text.replace(/(\d+)\/(\d+)/g, (match, num, den) => {
-      return `<span class="fraction"><span class="num">${toArabicIndic(num)}</span><span class="den">${toArabicIndic(den)}</span></span>`;
-    });
+  // ==================== الوضع الليلي ====================
+  let darkMode = localStorage.getItem('darkMode') === 'true';
+  function applyDarkMode() {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+      document.getElementById('darkModeToggle').innerHTML = '☀️';
+    } else {
+      document.body.classList.remove('dark-mode');
+      document.getElementById('darkModeToggle').innerHTML = '🌙';
+    }
+    localStorage.setItem('darkMode', darkMode);
   }
+  applyDarkMode();
+  document.getElementById('darkModeToggle').addEventListener('click', () => {
+    darkMode = !darkMode;
+    applyDarkMode();
+  });
 
-  // بنك الأسئلة (مختصر)
+  // ==================== معلومات المنصة ====================
+  document.getElementById('infoButton').addEventListener('click', () => {
+    const modalDiv = document.createElement('div');
+    modalDiv.className = 'modal-overlay';
+    modalDiv.innerHTML = `
+      <div class="modal-box" style="max-width: 550px;">
+        <div class="info-modal-content">
+          <h3 style="text-align:center; margin-bottom:16px;">📌 منصة نافس التفاعلية</h3>
+          <div class="highlight">
+            <strong>🎯 منصة محاكاة الاختبارات الوطنية "نافس"</strong><br>
+            قياس المهارات الحقيقية في الرياضيات والقراءة وفق معايير وطنية.
+          </div>
+          <h4>✨ المميزات:</h4>
+          <ul>
+            <li>📚 <strong>6 اختبارات شاملة</strong> (3 رياضيات + 3 قراءة)</li>
+            <li>⏱️ <strong>مؤقت زمني 25 دقيقة</strong> لكل اختبار</li>
+            <li>📊 <strong>تقارير مفصلة</strong> مع رسوم بيانية وتحليل الأداء</li>
+            <li>🔁 <strong>إعادة الاختبارات</strong> بعد إتمام جميع الاختبارات</li>
+            <li>🌙 <strong>وضع ليلي</strong> مريح للعين</li>
+            <li>🔍 <strong>مراجعة الأسئلة بعد كل اختبار</strong> لمعرفة الأخطاء</li>
+            <li>📱 <strong>إرسال النتائج لمعلم المادة عبر واتساب</strong></li>
+          </ul>
+          <h4>👨‍💻 المطور:</h4>
+          <p style="margin-right: 20px;">أسامة إبراهيم – مدارس رياض الإبداع الأهلية<br>العام الدراسي 1447 هـ</p>
+          <div style="text-align:center; margin-top:20px;">
+            <button id="closeInfoBtn" class="secondary">إغلاق</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modalDiv);
+    document.getElementById('closeInfoBtn').onclick = () => modalDiv.remove();
+  });
+
+  // ==================== دوال مساعدة ====================
+  function sanitizeText(str) { if (!str) return ''; const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
+  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+  function toArabicIndic(num) { const digits = '٠١٢٣٤٥٦٧٨٩'; return num.toString().replace(/\d/g, d => digits[parseInt(d)]); }
+  function convertNumbersToArabicIndic(text) { if (!text) return text; return text.replace(/\d+/g, match => toArabicIndic(match)); }
+  function formatFractions(text) { return text.replace(/(\d+)\/(\d+)/g, (match, num, den) => `<span class="fraction"><span class="num">${toArabicIndic(num)}</span><span class="den">${toArabicIndic(den)}</span></span>`); }
+
+  // ==================== بنك الأسئلة ====================
   const MATH_BANK = [
     { text: "ما اسم الشكل الهندسي الذي له 6 أوجه مربعة؟", options: ["مكعب", "مربع", "أسطوانة", "مستطيل"], correct: 0 },
     { text: "رسمت أمل مربعًا طول ضلعه 2 سم، ما مساحته؟", options: ["8 سم²", "4 سم²", "2 سم²", "12 سم²"], correct: 1 },
@@ -118,7 +247,11 @@
     { text: "سعر ساعة 228 ريال، أي الأوراق النقدية تكفي؟", options: ["200+20+5+3", "100+100+20+5", "100+50+50+20+5", "كلها"], correct: 0 },
     { text: "إذا غادرت الساعة 3:20 وبقيت ساعة وربع، متى تخرج؟", options: ["3:35", "4:15", "4:35", "5:10"], correct: 2 },
     { text: "قيمة 0 × (8+2) =", options: ["8", "2", "10", "0"], correct: 3 },
-    { text: "خاصية التجميع: 4×5×2 =", options: ["13", "14", "22", "40"], correct: 3 }
+    { text: "خاصية التجميع: 4×5×2 =", options: ["13", "14", "22", "40"], correct: 3 },
+    { text: "أي جملة عددية تمثل (235-149)؟", options: ["384=149+235", "86=149-235", "86=235-149", "47=5÷235"], correct: 2 },
+    { text: "محيط مربع طول ضلعه 5 سم:", options: ["20 سم", "25 سم", "10 سم", "15 سم"], correct: 0 },
+    { text: "ناتج 72 ÷ 8 =", options: ["8", "9", "7", "10"], correct: 1 },
+    { text: "أي الكسور أكبر: 2/3 أم 2/5؟", options: ["2/3", "2/5", "متساويان", "لا يمكن"], correct: 0 }
   ];
   const MATH_EXTRA = [
     { text: "إذا كان 3×□ = 21، فما قيمة □؟", options: ["6", "7", "8", "9"], correct: 1 },
@@ -129,11 +262,11 @@
 
   const READING_TEXTS = {
     "قراءة - اختبار 1": `الحمامتان والسلحفاة\nيُحكى أنّ حمامتين جميلتين قرّرتا السفر والابتعاد عن الغدير الذي عاشتا إلى جانبه طويلاً بسبب شح الماء فيه، فحزنت صديقتهما السلحفاة وطلبت منهما أن تأخذاها معهما، فأجابتها الحمامتان بأنها لا تستطيع الطيران. بكت السلحفاة كثيراً وتوسلت إليهما بأن تجدا طريقة لنقلها معهما، فكرت الحمامتان كثيراً وقررتا حملها معهما، فأحضرتا عوداً قوياً أمسكت كل واحدة منهما به من طرف وطلبتا من السلحفاة أن تعض على هذا العود حتى تطيرا بها، وحذرتاها من أن تفتح فمها مهما كلّف الأمر؛ لأن ذلك سيؤدي إلى سقوطها. وافقت السلحفاة على ذلك ووعدتهما بأن تنفذ ما طلبتاه منها، وطارت الحمامتان فوق الغابة، إلى أن رأى بعض الناس الحمامتين والسلحفاة فقالوا: يا للعجب حمامتان تحملان سلحفاة وتطيران بها! لم تستطع السلحفاة تمالك نفسها فقالت: فقاً الله أعينكم ما دخلكم أنتم؟! فسقطت بعد أن أفلتت العود من فمها وتكسرت أضلعها وقالت باكية: هذه هي نتيجة كثرة الكلام وعدم الوفاء بالوعد.`,
-    "قراءة - اختبار 2": `أبو الكيمياء جابر بن حيان\nهو أبو عبدالله جابر بن حيان الكوفي، كان والده صيدلانياً، مارس هذه المهنة مدة طويلة؛ فكان عمله دافعاً لشغف جابر. كتب عدداً كبيراً من الكتب في علوم مختلفة، وله العديد من الاختراعات؛ فهو أول من حضر ماء الذهب، وأول من صنع المواد التي تعزل البلل عن النبات. وعمل في تركيب العطور والأدوية، وتطوير صناعة الإناء والمصابيح والمرايا المزخرفة بالفسيفساء الإسلامية. كما برع في صناعة أنواع من الجر الملون الذي لا تمحوه النار، بل تزيده وضوحاً وبريقاً وثباتاً. وتلبيةً لطلب أستاذه، اخترع نوعاً من الورق لا تؤثر فيه النار، استغرق ذلك منه وقتاً طويلاً، إذ كان يمكث في مخبره منكباً على إجراء التجارب الدقيقة على أنواع من الأوراق، يصنعها في مخائل خاصة ويصب عليها في كل مرة خليطاً من السوائل التي ابتكرها، ثم يدعها حتى تجف، إلى أن توصل إلى اختراع الورق المقاوم للنار. وذات يوم، بينما كان أستاذه جالساً في بيته ومعه عدد كبير من ضيوفه وتلاميذه يختلفون بتهنئة الأستاذ من تأليف كتاب ضخم، دخل عليه جابر حاملاً بين يديه نسخة أخرى من الكتاب مغلفة بغلاف جميل مزين بالفسيفساء الإسلامية، ثم فاجأ الحاضرين بإلقاء النسخة في موقد النار، فصدرت من الجميع صرخات الاستنكار، وأسرع بعضهم لإنقاذ الكتاب من النار، إلا أن جابراً أخرجه من النار سليماً، وكانت النار لم تمسسه. حقاً إن جابر بن حيان عبقري من عباقرة العرب والمسلمين الذين نبغوا في علم لم يشتهر فيه أحد قبلهم.`,
+    "قراءة - اختبار 2": `أبو الكيمياء جابر بن حيان\nهو أبو عبدالله جابر بن حيان الكوفي، كان والده صيدلانياً، مارس هذه المهنة مدة طويلة؛ فكان عمله دافعاً لشغف جابر. كتب عدداً كبيراً من الكتب في علوم مختلفة، وله العديد من الاختراعات؛ فهو أول من حضر ماء الذهب، وأول من صنع المواد التي تعزل البلل عن الثياب. وعمل في تركيب العطور والأدوية، وتطوير صناعة الإناء والمصابيح والمرايا المزخرفة بالفسيفساء الإسلامية. كما برع في صناعة أنواع من الحبر الملون الذي لا تمحوه النار، بل تزيده وضوحاً وبريقاً وثباتاً. وتلبيةً لطلب أستاذه، اخترع نوعاً من الورق لا تؤثر فيه النار، استغرق ذلك منه وقتاً طويلاً، إذ كان يمكث في مختبره منكباً على إجراء التجارب الدقيقة على أنواع من الأوراق، يصنعها في محاليل خاصة ويصب عليها في كل مرة خليطاً من السوائل التي ابتكرها، ثم يدعها حتى تجف، إلى أن توصل إلى اختراع الورق المقاوم للنار. وذات يوم، بينما كان أستاذه جالساً في بيته ومعه عدد كبير من ضيوفه وتلاميذه يحتفلون بتهنئة الأستاذ بسبب تأليف كتاب ضخم، دخل عليه جابر حاملاً بين يديه نسخة أخرى من الكتاب مغلفة بغلاف جميل مزين بالفسيفساء الإسلامية، ثم فاجأ الحاضرين بإلقاء النسخة في موقد النار، فصدرت من الجميع صرخات الاستنكار، وأسرع بعضهم لإنقاذ الكتاب من النار، إلا أن جابراً أخرجه من النار سليماً، وكانت النار لم تمسسه. حقاً إن جابر بن حيان عبقري من عباقرة العرب والمسلمين الذين نبغوا في علم لم يشتهر فيه أحد قبلهم.`,
     "قراءة - اختبار 3": `نظافة البحار والمحيطات\nخرج خالد مع والده في رحلة إلى شاطئ البحر، كان البحر هادئاً، والأمواج تتلاطم بلطف. بينما كان خالد يتأمل روعة البحر وجماله، رأى أسرة ترمي بقايا الطعام والأكياس البلاستيكية في مياه البحر. تعجب خالد من هذا المشهد وقال: "يا للعجب! كيف يرمون النفايات في البحر؟" أجاب والده بحزن: "هذا تصرف خاطئ، إن التلوث يضر بالكائنات البحرية ويؤثر على جمال البحر ونقائه. لقد سخّر الله لنا البحر وما فيه من خيرات، علينا أن نحافظ عليه. ولذلك قامت حكومتنا الرشيدة بحملات توعوية وقوانين صارمة للحفاظ على البيئة البحرية." أشار الأب إلى أن التلوث يسبب موت الأسماك وتكاثر البكتيريا الضارة، كما يفقد البحر رونقه وجماله. يجب علينا جميعاً المحافظة على نظافة الشواطئ والبحار، والإبلاغ عن المخالفين. شعر خالد بالحزن لما رآه، وعاهد نفسه أن يكون حريصاً على نظافة البيئة البحرية.`
   };
 
-  const READING_BANK = [
+  const READING_BANK_TEXT1 = [
     { text: "مرادف كلمة (شُحَّ) في نص الحمامتان:", options: ["كثرة", "قلة", "خرير", "سخاء"], correct: 1 },
     { text: "ضد كلمة (شُحَّ):", options: ["بخل", "سخاء", "إمساك", "حرص"], correct: 1 },
     { text: "معنى كلمة (غدير):", options: ["البحر", "البحيرة", "النهر الصغير", "جدول"], correct: 2 },
@@ -142,24 +275,61 @@
     { text: "نوع نص الحمامتان:", options: ["شعر", "حوار", "قصة", "نثر"], correct: 2 },
     { text: "من المتسبب بسقوط السلحفاة؟", options: ["السلحفاة", "الحمامتان", "العود", "الماء"], correct: 0 },
     { text: "السبب الرئيس لسقوطها:", options: ["كثرة كلامها", "تعلقها", "عدم وفاء", "تعجب الناس"], correct: 0 },
+    { text: "ماذا حملت الحمامتان لتساعدا السلحفاة؟", options: ["عوداً", "حبلًا", "غصناً", "جناحاً"], correct: 0 },
+    { text: "ماذا قالت السلحفاة عندما تعجب الناس؟", options: ["فقاً الله أعينكم", "سبحان الله", "لا حول ولا قوة", "الحمد لله"], correct: 0 },
+    { text: "نتيجة كثرة الكلام في القصة كانت:", options: ["السقوط والتكسر", "النجاة", "الفرح", "السفر"], correct: 0 },
+    { text: "العبرة من القصة:", options: ["الوفاء بالوعد", "عدم الكلام", "مساعدة الآخرين", "السفر"], correct: 0 },
+    { text: "أين كانت تعيش الحمامتان؟", options: ["بجانب غدير", "في البحر", "في الغابة", "في الجبل"], correct: 0 },
+    { text: "من طلب من الحمامتين أن تأخذاها معهما؟", options: ["السلحفاة", "الناس", "الطيور", "السمكة"], correct: 0 },
+    { text: "كيف حملت الحمامتان السلحفاة؟", options: ["عضت على عود", "على الظهر", "بالجناح", "بالمنقار"], correct: 0 }
+  ];
+
+  const READING_BANK_TEXT2 = [
     { text: "مرادف (تعزل) من نص جابر:", options: ["تحجب", "تكر", "تتجل", "تقل"], correct: 0 },
     { text: "معنى (اخترع):", options: ["شاهد", "تاجر", "ابتكر", "تناقش"], correct: 2 },
     { text: "لماذا اخترع جابر ورقاً لا تحرقه النار؟", options: ["طلب أستاذه", "مفاجأة", "خوفًا على الكتب", "كل ما ذكر"], correct: 0 },
     { text: "الهدف من قصة جابر:", options: ["منجزات عالم مسلم", "ضرورة الالتزام", "عواقب", "صناعة ماء الذهب"], correct: 0 },
     { text: "لماذا رمى جابر الكتاب في النار؟", options: ["سقط سهواً", "للتخلص", "لمفاجأة الحاضرين", "للتدفئة"], correct: 2 },
-    { text: "الهدف من قصة نظافة البحار:", options: ["الحياة الفطرية", "المحافظة على نظافة البحار", "حياة الأسماك", "الصيد"], correct: 1 },
-    { text: "شعور خالد عند رؤية النفايات:", options: ["بالحزن", "بالخوف", "بالوحدة", "بالفرح"], correct: 0 }
+    { text: "ما مهنة والد جابر بن حيان؟", options: ["صيدلاني", "طبيب", "كيميائي", "تاجر"], correct: 0 },
+    { text: "ماذا صنع جابر ليحمي الثياب من البلل؟", options: ["مواد عازلة", "دهانات", "أقمشة", "بلاستيك"], correct: 0 },
+    { text: "الورق الذي اخترعه جابر اتسم بأنه:", options: ["مقاوم للنار", "ملون", "شفاف", "رقيق"], correct: 0 },
+    { text: "ماذا ألقى جابر في النار أمام الحاضرين؟", options: ["نسخة من الكتاب", "ورقة عادية", "قطعة قماش", "عود بخور"], correct: 0 },
+    { text: "نتيجة إلقاء الكتاب في النار:", options: ["لم تحترق", "احترقت", "تحولت لرماد", "تطايرت"], correct: 0 },
+    { text: "جابر بن حيان يكنى بـ:", options: ["أبو عبدالله", "أبو بكر", "أبو الكيمياء", "أبو حيان"], correct: 0 },
+    { text: "من العلوم التي برع فيها جابر:", options: ["الكيمياء", "الطب", "الهندسة", "الفلك"], correct: 0 },
+    { text: "ماء الذهب من اختراعات:", options: ["جابر بن حيان", "الرازي", "ابن سينا", "الخوارزمي"], correct: 0 },
+    { text: "لماذا كان أستاذ جابر سعيداً؟", options: ["تأليف كتاب", "اختراع دواء", "سفر", "زواج"], correct: 0 },
+    { text: "صفة من صفات جابر بن حيان:", options: ["العلم والعبقرية", "الغضب", "السرعة", "الخوف"], correct: 0 }
   ];
-  const FULL_READING = [...READING_BANK, ...READING_BANK.slice(0, 20)].slice(0, 45);
+
+  const READING_BANK_TEXT3 = [
+    { text: "الهدف من قصة نظافة البحار:", options: ["الحياة الفطرية", "المحافظة على نظافة البحار", "حياة الأسماك", "الصيد"], correct: 1 },
+    { text: "شعور خالد عند رؤية النفايات:", options: ["بالحزن", "بالخوف", "بالوحدة", "بالفرح"], correct: 0 },
+    { text: "ماذا كانت تفعل الأسرة على الشاطئ؟", options: ["ترمي النفايات", "تسبح", "تلعب", "تصطاد"], correct: 0 },
+    { text: "من وجه مع والده إلى الشاطئ؟", options: ["خالد", "سالم", "أحمد", "علي"], correct: 0 },
+    { text: "ما الذي يسببه التلوث للأسماك؟", options: ["الموت", "المرض", "الهجرة", "النمو"], correct: 0 },
+    { text: "كيف حافظت حكومتنا على البيئة البحرية؟", options: ["قوانين صارمة", "منع الصيد", "ردم البحر", "بناء الفنادق"], correct: 0 },
+    { text: "ماذا عاهد خالد نفسه عليه؟", options: ["المحافظة على النظافة", "الصيد", "السباحة", "السفر"], correct: 0 },
+    { text: "البحر في بداية القصة كان:", options: ["هادئاً", "عاصفاً", "ملوثاً", "ضيقاً"], correct: 0 },
+    { text: "من الذي أخبر خالداً عن أضرار التلوث؟", options: ["والده", "أمه", "معلمه", "صديقه"], correct: 0 },
+    { text: "ماذا يجب على المواطن فعله تجاه المخالفين؟", options: ["الإبلاغ", "السكوت", "المشاركة", "التجاهل"], correct: 0 },
+    { text: "الغرض من القصة:", options: ["توعوي", "ترفيهي", "تاريخي", "علمي"], correct: 0 },
+    { text: "من يقوم بحماية البيئة البحرية؟", options: ["الحكومة والمواطن", "الصيادون فقط", "السياح", "الغواصون"], correct: 0 },
+    { text: "ماذا يفقد البحر بسبب التلوث؟", options: ["رونقه وجماله", "عمقه", "ملوحته", "حرارته"], correct: 0 },
+    { text: "ما نوع النفايات التي رمتها الأسرة؟", options: ["بلاستيك وطعام", "زجاج", "ورق", "معادن"], correct: 0 },
+    { text: "مشهد رمي النفايات جعل خالداً يشعر بـ:", options: ["الحزن والتعجب", "الفرح", "الغضب", "الخوف"], correct: 0 }
+  ];
+
+  const FULL_READING = [...READING_BANK_TEXT1, ...READING_BANK_TEXT2, ...READING_BANK_TEXT3];
 
   function buildTests(bank, subject, count = 3, titlePrefix, storyMap = null) {
     const tests = [];
     for (let i = 0; i < count; i++) {
-      const start = (i * 15) % (bank.length - 14);
+      const start = i * 15;
       const questions = bank.slice(start, start + 15).map(q => ({
         ...q,
-        text: formatFractions(q.text),
-        options: q.options.map(opt => formatFractions(opt))
+        text: convertNumbersToArabicIndic(formatFractions(q.text)),
+        options: q.options.map(opt => convertNumbersToArabicIndic(formatFractions(opt)))
       }));
       tests.push({
         id: `${subject}_test_${i+1}`,
@@ -175,36 +345,48 @@
   const readingTests = buildTests(FULL_READING, 'reading', 3, 'قراءة', READING_TEXTS);
   const allTests = [...mathTests, ...readingTests];
 
+  // ==================== إدارة التخزين ====================
   let student = { name: "", grade: "" };
   let reports = [];
 
   function loadData() {
+    if (!isLocalStorageAvailable()) { student = { name: "", grade: "" }; reports = []; return; }
     const savedStudent = localStorage.getItem('ebdaa_student');
     if (savedStudent) student = JSON.parse(savedStudent);
-    const savedReports = localStorage.getItem('ebdaa_reports');
+    const savedReports = localStorage.getItem('ebdaa_reports_v5');
     if (savedReports) reports = JSON.parse(savedReports);
+    else reports = [];
     updateBadge();
   }
-  function saveStudent() { localStorage.setItem('ebdaa_student', JSON.stringify(student)); }
-  function saveReports() { localStorage.setItem('ebdaa_reports', JSON.stringify(reports)); }
-  function updateBadge() {
-    const badge = document.getElementById('studentBadge');
-    if(badge) badge.innerText = `👨‍🎓 ${student.name || "غير مسجل"}  |  ${student.grade || "الثالث"}`;
+  function saveStudent() { if(isLocalStorageAvailable()) localStorage.setItem('ebdaa_student', JSON.stringify(student)); }
+  function saveReports() { if(isLocalStorageAvailable()) localStorage.setItem('ebdaa_reports_v5', JSON.stringify(reports)); }
+
+  function getBestAttempt(testId) {
+    const report = reports.find(r => r.testId === testId && r.studentName === student.name);
+    return report ? { score: report.bestScore, total: report.bestTotal, time: report.bestTime, attempts: report.attempts } : null;
   }
 
-  function isAllTestsCompleted() {
-    const completedIds = reports.filter(r => r.studentName === student.name).map(r => r.testId);
-    return allTests.every(t => completedIds.includes(t.id));
+  function updateBestAttempt(testId, score, total, timeTakenSeconds) {
+    const existingIndex = reports.findIndex(r => r.testId === testId && r.studentName === student.name);
+    const attempt = { score, total, time: timeTakenSeconds, date: new Date().toLocaleString('ar-SA') };
+    const testTitle = allTests.find(t => t.id === testId).title;
+    const subject = allTests.find(t => t.id === testId).subject;
+    if (existingIndex === -1) {
+      reports.push({ testId, studentName: student.name, testTitle, subject, bestScore: score, bestTotal: total, bestTime: timeTakenSeconds, attempts: [attempt] });
+    } else {
+      const rep = reports[existingIndex];
+      rep.attempts.push(attempt);
+      if (score > rep.bestScore) { rep.bestScore = score; rep.bestTotal = total; rep.bestTime = timeTakenSeconds; }
+    }
+    saveReports();
   }
 
-  function isTestCompleted(testId) {
-    return reports.some(r => r.studentName === student.name && r.testId === testId);
-  }
-
+  function isTestCompleted(testId) { return getBestAttempt(testId) !== null; }
+  function isAllTestsCompleted() { return allTests.every(t => isTestCompleted(t.id)); }
+  function updateBadge() { const badge = document.getElementById('studentBadge'); if(badge) badge.textContent = `👨‍🎓 ${student.name || "غير مسجل"}  |  ${student.grade || "الثالث"}`; }
   function showCustomMessage(title, message, onConfirm = null) {
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `<div class="modal-box" style="max-width:400px; text-align:center"><h3>${title}</h3><p style="margin:20px 0">${message}</p><button id="msgConfirmBtn" style="background:#2e7d64">حسنًا</button></div>`;
+    const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay';
+    modalDiv.innerHTML = `<div class="modal-box" style="max-width:400px; text-align:center"><h3>${escapeHtml(title)}</h3><p style="margin:16px 0">${escapeHtml(message)}</p><button id="msgConfirmBtn" style="background:#2e7d64">حسنًا</button></div>`;
     document.body.appendChild(modalDiv);
     document.getElementById('msgConfirmBtn').onclick = () => { modalDiv.remove(); if(onConfirm) onConfirm(); };
   }
@@ -213,19 +395,17 @@
   function playBeep(type = 'correct') {
     try {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
       osc.frequency.value = type === 'correct' ? 880 : 440;
       gain.gain.value = 0.2;
       osc.start();
       gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
       osc.stop(audioCtx.currentTime + 0.3);
-    } catch(e) {}
+    } catch(e) { console.warn("Audio not supported"); }
   }
 
-  // نظام الاختبار
+  // ==================== نظام الاختبار ====================
   let currentTest = null, currentAnswers = [], currentQIndex = 0;
   let timerInterval = null, startTime = null, timeLeftSeconds = 25 * 60;
   let testActive = false;
@@ -234,79 +414,146 @@
   function stopTimer() { if(timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
   function formatTime(sec) { const mins = Math.floor(sec / 60); const remainSec = sec % 60; return `${toArabicIndic(mins)}:${toArabicIndic(remainSec.toString().padStart(2,'0'))}`; }
   function updateTimerDisplay() { if(currentModalDiv) { const timerElem = currentModalDiv.querySelector('#timerDisplay'); if(timerElem) timerElem.innerText = formatTime(timeLeftSeconds); } }
-  function startTimer() { startTime = Date.now(); if(timerInterval) clearInterval(timerInterval); timerInterval = setInterval(() => { if(!testActive) return; const elapsed = Math.floor((Date.now() - startTime) / 1000); timeLeftSeconds = Math.max(0, 25*60 - elapsed); updateTimerDisplay(); if(timeLeftSeconds <= 0) { stopTimer(); if(testActive) autoSubmitTest(); } }, 1000); }
+  function startTimer() {
+    startTime = Date.now();
+    if(timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      if(!testActive) return;
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      timeLeftSeconds = Math.max(0, 25*60 - elapsed);
+      updateTimerDisplay();
+      if(timeLeftSeconds <= 0) { stopTimer(); if(testActive) finishTest(true); }
+    }, 1000);
+  }
 
-  function autoSubmitTest() {
+  function finishTest(isAuto = false) {
     if(!testActive) return;
-    testActive = false; stopTimer();
-    let score = 0; currentTest.questions.forEach((q, idx) => { if(currentAnswers[idx] === q.correct) score++; });
-    const total = currentTest.questions.length; const timeTaken = 25*60 - timeLeftSeconds;
-    const existing = reports.find(r => r.testId === currentTest.id && r.studentName === student.name);
-    if (!existing) { reports.push({ testId: currentTest.id, testTitle: currentTest.title, subject: currentTest.subject, date: new Date().toLocaleString('ar-SA'), score, total, timeTakenSeconds: timeTaken, studentName: student.name, answers: [...currentAnswers], questions: currentTest.questions }); saveReports(); }
-    removeExistingModals(); showResultModal(score, total, timeTaken, currentAnswers, currentTest.questions);
-  }
-
-  function finishTestManually() {
-    if(!testActive) return;
-    let score = 0; currentTest.questions.forEach((q, idx) => { if(currentAnswers[idx] === q.correct) score++; });
-    const total = currentTest.questions.length; const elapsed = Math.floor((Date.now() - startTime) / 1000); const timeTaken = Math.min(25*60, elapsed);
-    const existing = reports.find(r => r.testId === currentTest.id && r.studentName === student.name);
-    if (!existing) { reports.push({ testId: currentTest.id, testTitle: currentTest.title, subject: currentTest.subject, date: new Date().toLocaleString('ar-SA'), score, total, timeTakenSeconds: timeTaken, studentName: student.name, answers: [...currentAnswers], questions: currentTest.questions }); saveReports(); }
-    testActive = false; stopTimer(); removeExistingModals(); showResultModal(score, total, timeTaken, currentAnswers, currentTest.questions);
-  }
-
-  function showResultModal(score, total, timeTakenSec, userAnswersArr, questionsArr) {
-    const teacherPhone = currentTest.subject === 'math' ? "00966540437287" : "00966540312932";
-    const minutes = Math.floor(timeTakenSec / 60); const seconds = timeTakenSec % 60;
-    const timeStr = `${toArabicIndic(minutes)}:${toArabicIndic(seconds.toString().padStart(2,'0'))}`;
-    const msg = `الطالب ${student.name} - ${student.grade}\nالاختبار: ${currentTest.title}\nالدرجة: ${score}/${total} (${Math.round(score/total*100)}%)\nالزمن المستغرق: ${timeStr}\nعدد الأسئلة: ${total}`;
-    const whatsappLink = `https://wa.me/${teacherPhone}?text=${encodeURIComponent(msg)}`;
-    const resultModal = document.createElement('div');
-    resultModal.className = 'modal-overlay';
-    resultModal.innerHTML = `<div class="modal-box" style="text-align:center"><h2>🏆 نتيجة الاختبار</h2><div class="big-score">${toArabicIndic(score)} / ${toArabicIndic(total)}</div><p>نسبة الإنجاز: ${toArabicIndic(Math.round(score/total*100))}%</p><p>⏱️ الزمن المستغرق: ${timeStr}</p><div style="margin:20px 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap"><a href="${whatsappLink}" target="_blank" style="background:#25D366; padding:12px 20px; border-radius:60px; color:white; text-decoration:none; display:inline-block">📱 إرسال لمعلم المادة</a><button id="reviewAnswersBtn" class="review-btn" style="background:#f7b32b; color:#1e2a1e">📝 مراجعة الأسئلة</button></div><button id="closeResultBtn" class="secondary">إغلاق</button></div>`;
-    document.body.appendChild(resultModal);
-    document.getElementById('closeResultBtn').onclick = () => { resultModal.remove(); renderHome(); };
-    document.getElementById('reviewAnswersBtn').onclick = () => showReviewModal(questionsArr, userAnswersArr);
-  }
-
-  function showReviewModal(questions, userAnswers) {
-    let tableRows = '';
-    questions.forEach((q, idx) => {
-      const userOptIdx = userAnswers[idx];
-      const userAnswerText = (userOptIdx !== null) ? q.options[userOptIdx] : "لم يجب";
-      const correctAnswerText = q.options[q.correct];
-      const isCorrect = (userOptIdx === q.correct);
-      const statusIcon = isCorrect ? '✅' : '❌';
-      tableRows += `<tr style="${!isCorrect ? 'background:#fff5f0' : ''}">
-        <td style="width:40px; text-align:center">${toArabicIndic(idx+1)}</td>
-        <td>${q.text}</td>
-        <td style="background:#f0f0f0">${userAnswerText}</td>
-        <td class="correct-answer">${correctAnswerText}</td>
-        <td style="text-align:center">${statusIcon}</td>
-      </tr>`;
-    });
-    const reviewModal = document.createElement('div');
-    reviewModal.className = 'modal-overlay';
-    reviewModal.innerHTML = `<div class="modal-box"><h3 style="margin-bottom:16px">📋 مراجعة الأسئلة - ${currentTest.title}</h3><div style="overflow-x:auto"><table class="review-table"><thead><tr><th>#</th><th>السؤال</th><th>إجابتك</th><th>الإجابة الصحيحة</th><th>الحالة</th></tr></thead><tbody>${tableRows}</tbody></table></div><button id="closeReviewBtn" class="secondary" style="margin-top:20px; width:100%">إغلاق</button></div>`;
-    document.body.appendChild(reviewModal);
-    document.getElementById('closeReviewBtn').onclick = () => reviewModal.remove();
+    testActive = false;
+    stopTimer();
+    let score = 0;
+    currentTest.questions.forEach((q, idx) => { if(currentAnswers[idx] === q.correct) score++; });
+    const total = currentTest.questions.length;
+    const timeTaken = Math.min(25*60, Math.floor((Date.now() - startTime) / 1000));
+    updateBestAttempt(currentTest.id, score, total, timeTaken);
+    // حفظ نسخة من الأسئلة والإجابات للمراجعة
+    const questionsCopy = [...currentTest.questions];
+    const answersCopy = [...currentAnswers];
+    const testTitleCopy = currentTest.title;
+    removeExistingModals();
+    showResultModal(score, total, timeTaken, questionsCopy, answersCopy, testTitleCopy);
   }
 
   function removeExistingModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.remove()); currentModalDiv = null; }
+
+  // دالة عرض النتيجة مع زر المراجعة
+  function showResultModal(score, total, timeTakenSec, questions, userAnswers, testTitle) {
+    const teacherPhone = currentTest.subject === 'math' ? "+966540437287" : "+966540312932";
+    const minutes = Math.floor(timeTakenSec / 60);
+    const seconds = timeTakenSec % 60;
+    const timeStr = `${toArabicIndic(minutes)}:${toArabicIndic(seconds.toString().padStart(2,'0'))}`;
+    const percent = Math.round(score/total*100);
+    const msg = `الطالب: ${student.name}\nالاختبار: ${testTitle}\nالدرجة: ${score}/${total} (${percent}%)\nالزمن: ${timeStr}`;
+    const whatsappLink = `https://wa.me/${teacherPhone}?text=${encodeURIComponent(msg)}`;
+    const resultModal = document.createElement('div');
+    resultModal.className = 'modal-overlay';
+    resultModal.innerHTML = `
+      <div class="modal-box" style="text-align:center">
+        <h2>🏆 نتيجة الاختبار</h2>
+        <div class="big-score">${toArabicIndic(score)} / ${toArabicIndic(total)}</div>
+        <p>نسبة الإنجاز: ${toArabicIndic(percent)}%</p>
+        <p>⏱️ الزمن المستغرق: ${timeStr}</p>
+        <div style="margin:16px 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
+          <a href="${whatsappLink}" target="_blank" class="whatsapp-icon">📱 واتساب المعلم</a>
+          <button id="reviewBtn" style="background:#0b2b40">🔍 مراجعة الأسئلة</button>
+        </div>
+        <button id="closeResultBtn" class="secondary">إغلاق</button>
+      </div>
+    `;
+    document.body.appendChild(resultModal);
+    document.getElementById('closeResultBtn').onclick = () => { resultModal.remove(); renderHome(); };
+    document.getElementById('reviewBtn').onclick = () => {
+      resultModal.remove();
+      showReviewModal(questions, userAnswers, testTitle);
+    };
+  }
+
+  // دالة مراجعة الأسئلة
+  function showReviewModal(questions, userAnswers, testTitle) {
+    let currentReviewIndex = 0;
+    function renderReviewQuestion() {
+      const q = questions[currentReviewIndex];
+      const userChoice = userAnswers[currentReviewIndex];
+      const isCorrect = (userChoice === q.correct);
+      const correctAnswerText = q.options[q.correct];
+      const userAnswerText = (userChoice !== null && userChoice !== undefined) ? q.options[userChoice] : "لم يتم الإجابة";
+      
+      const reviewHtml = `
+        <div class="modal-box" style="max-width:700px">
+          <h3 style="text-align:center">📖 مراجعة الاختبار: ${escapeHtml(testTitle)}</h3>
+          <div style="margin:16px 0">
+            <div class="q-counter" style="text-align:center; margin-bottom:10px">
+              السؤال ${toArabicIndic(currentReviewIndex+1)} / ${toArabicIndic(questions.length)}
+            </div>
+            <div class="q-text" style="background:#f0f4fa">${q.text}</div>
+            <div style="margin-top:16px">
+              <div class="review-answer-box" style="background: ${isCorrect ? '#e0f2e9' : '#ffe6e5'}">
+                <strong>✅ إجابتك:</strong> ${escapeHtml(userAnswerText)}
+                ${isCorrect ? '<span style="color:#2e7d64"> ✔️ صحيحة</span>' : '<span style="color:#d32f2f"> ❌ خاطئة</span>'}
+              </div>
+              <div class="review-answer-box" style="background:#e8f0fe">
+                <strong>📌 الإجابة الصحيحة:</strong> ${escapeHtml(correctAnswerText)}
+              </div>
+            </div>
+          </div>
+          <div class="nav-btns">
+            <button id="prevReviewBtn" class="secondary" ${currentReviewIndex===0 ? 'disabled' : ''}>السابق</button>
+            <button id="nextReviewBtn">${currentReviewIndex === questions.length-1 ? 'إنهاء' : 'التالي'}</button>
+          </div>
+        </div>
+      `;
+      const existingModal = document.querySelector('.modal-overlay');
+      if(existingModal) existingModal.remove();
+      const modalDiv = document.createElement('div');
+      modalDiv.className = 'modal-overlay';
+      modalDiv.innerHTML = reviewHtml;
+      document.body.appendChild(modalDiv);
+      document.getElementById('prevReviewBtn')?.addEventListener('click', () => {
+        if(currentReviewIndex > 0) { currentReviewIndex--; renderReviewQuestion(); }
+      });
+      document.getElementById('nextReviewBtn')?.addEventListener('click', () => {
+        if(currentReviewIndex < questions.length-1) { currentReviewIndex++; renderReviewQuestion(); }
+        else { modalDiv.remove(); renderHome(); }
+      });
+    }
+    renderReviewQuestion();
+  }
 
   function updateCurrentQuestion() {
     if(!currentModalDiv || !currentTest) return;
     const q = currentTest.questions[currentQIndex];
     const selectedIdx = currentAnswers[currentQIndex];
     let optsHtml = '';
-    q.options.forEach((opt, idx) => { const isSel = (selectedIdx === idx); optsHtml += `<div class="opt ${isSel ? 'selected' : ''}" data-optidx="${idx}"><div class="opt-prefix">${String.fromCharCode(65+idx)}</div><div>${opt}</div></div>`; });
+    q.options.forEach((opt, idx) => {
+      const isSel = (selectedIdx === idx);
+      optsHtml += `<div class="opt ${isSel ? 'selected' : ''}" data-optidx="${idx}"><div class="opt-prefix">${String.fromCharCode(65+idx)}</div><div>${opt}</div></div>`;
+    });
     const qTextDiv = currentModalDiv.querySelector('.q-text');
     const optionsDiv = currentModalDiv.querySelector('.options');
     const qCounterSpan = currentModalDiv.querySelector('.q-counter');
     if(qTextDiv) qTextDiv.innerHTML = q.text;
     if(optionsDiv) optionsDiv.innerHTML = optsHtml;
     if(qCounterSpan) qCounterSpan.innerHTML = `السؤال ${toArabicIndic(currentQIndex+1)} / ${toArabicIndic(currentTest.questions.length)}`;
-    currentModalDiv.querySelectorAll('.opt').forEach(opt => { opt.addEventListener('click', (e) => { if(!testActive) return; const idx = parseInt(opt.dataset.optidx); if (currentAnswers[currentQIndex] !== idx) { currentAnswers[currentQIndex] = idx; playBeep('correct'); updateCurrentQuestion(); } }); });
+    currentModalDiv.querySelectorAll('.opt').forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        if(!testActive) return;
+        const idx = parseInt(opt.dataset.optidx);
+        if (currentAnswers[currentQIndex] !== idx) {
+          currentAnswers[currentQIndex] = idx;
+          playBeep('correct');
+          updateCurrentQuestion();
+        }
+      });
+    });
   }
 
   function renderTestQuestion() {
@@ -315,20 +562,65 @@
     const q = currentTest.questions[currentQIndex];
     const selectedIdx = currentAnswers[currentQIndex];
     let optsHtml = '';
-    q.options.forEach((opt, idx) => { const isSel = (selectedIdx === idx); optsHtml += `<div class="opt ${isSel ? 'selected' : ''}" data-optidx="${idx}"><div class="opt-prefix">${String.fromCharCode(65+idx)}</div><div>${opt}</div></div>`; });
+    q.options.forEach((opt, idx) => {
+      const isSel = (selectedIdx === idx);
+      optsHtml += `<div class="opt ${isSel ? 'selected' : ''}" data-optidx="${idx}"><div class="opt-prefix">${String.fromCharCode(65+idx)}</div><div>${opt}</div></div>`;
+    });
     const modalDiv = document.createElement('div');
     modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `<div class="modal-box"><div class="timer-bar" style="direction:ltr">⏱️ الوقت المتبقي: <span id="timerDisplay">${formatTime(timeLeftSeconds)}</span></div><div style="display:flex; justify-content:space-between; margin-bottom:12px"><span>${currentTest.title}</span><span class="q-counter">السؤال ${toArabicIndic(currentQIndex+1)} / ${toArabicIndic(currentTest.questions.length)}</span></div><div class="q-text">${q.text}</div><div class="options" id="testOptions">${optsHtml}</div><div class="nav-btns"><button id="prevQ" class="secondary" ${currentQIndex===0 ? 'disabled' : ''}>السابق</button><button id="nextQ">${currentQIndex === currentTest.questions.length-1 ? 'إنهاء' : 'التالي'}</button></div></div>`;
+    modalDiv.innerHTML = `
+      <div class="modal-box">
+        <div class="timer-bar" style="direction:ltr">⏱️ الوقت المتبقي: <span id="timerDisplay">${formatTime(timeLeftSeconds)}</span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px">
+          <span>${escapeHtml(currentTest.title)}</span>
+          <span class="q-counter">السؤال ${toArabicIndic(currentQIndex+1)} / ${toArabicIndic(currentTest.questions.length)}</span>
+        </div>
+        <div class="q-text">${q.text}</div>
+        <div class="options" id="testOptions">${optsHtml}</div>
+        <div class="nav-btns">
+          <button id="prevQ" class="secondary" ${currentQIndex===0 ? 'disabled' : ''}>السابق</button>
+          <button id="nextQ">${currentQIndex === currentTest.questions.length-1 ? 'إنهاء' : 'التالي'}</button>
+        </div>
+      </div>
+    `;
     document.body.appendChild(modalDiv);
     currentModalDiv = modalDiv;
-    if(!timerInterval) startTimer(); else updateTimerDisplay();
-    currentModalDiv.querySelectorAll('.opt').forEach(opt => { opt.addEventListener('click', (e) => { if(!testActive) return; const idx = parseInt(opt.dataset.optidx); if (currentAnswers[currentQIndex] !== idx) { currentAnswers[currentQIndex] = idx; playBeep('correct'); updateCurrentQuestion(); } }); });
-    currentModalDiv.querySelector('#prevQ')?.addEventListener('click', () => { if(testActive && currentQIndex>0){ currentQIndex--; updateCurrentQuestion(); } });
-    currentModalDiv.querySelector('#nextQ')?.addEventListener('click', () => { if(!testActive) return; if (currentAnswers[currentQIndex] === null) { showCustomMessage("تنبيه", "الرجاء اختيار إجابة قبل المتابعة."); playBeep('wrong'); return; } if (currentQIndex === currentTest.questions.length-1) finishTestManually(); else { currentQIndex++; updateCurrentQuestion(); } });
+    if(!timerInterval) startTimer();
+    else updateTimerDisplay();
+
+    currentModalDiv.querySelectorAll('.opt').forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        if(!testActive) return;
+        const idx = parseInt(opt.dataset.optidx);
+        if (currentAnswers[currentQIndex] !== idx) {
+          currentAnswers[currentQIndex] = idx;
+          playBeep('correct');
+          updateCurrentQuestion();
+        }
+      });
+    });
+    currentModalDiv.querySelector('#prevQ')?.addEventListener('click', () => {
+      if(testActive && currentQIndex>0){ currentQIndex--; updateCurrentQuestion(); }
+    });
+    currentModalDiv.querySelector('#nextQ')?.addEventListener('click', () => {
+      if(!testActive) return;
+      if (currentAnswers[currentQIndex] === null) {
+        showCustomMessage("تنبيه", "الرجاء اختيار إجابة قبل المتابعة.");
+        playBeep('wrong');
+        return;
+      }
+      if (currentQIndex === currentTest.questions.length-1) finishTest();
+      else { currentQIndex++; updateCurrentQuestion(); }
+    });
   }
 
   function startTest(testObj) {
-    if(isTestCompleted(testObj.id) && !isAllTestsCompleted()) { showCustomMessage("⚠️ الاختبار مقفل", "لقد أنهيت هذا الاختبار مسبقاً. لا يمكن إعادته إلا بعد الانتهاء من جميع الاختبارات الستة."); return; }
+    const completed = isTestCompleted(testObj.id);
+    const allDone = isAllTestsCompleted();
+    if(completed && !allDone) {
+      showCustomMessage("⚠️ الاختبار مقفل", "لقد أنهيت هذا الاختبار مسبقاً. لا يمكن إعادته إلا بعد الانتهاء من جميع الاختبارات الستة.");
+      return;
+    }
     currentTest = testObj;
     currentAnswers = new Array(testObj.questions.length).fill(null);
     currentQIndex = 0;
@@ -338,33 +630,87 @@
       const story = testObj.storyText;
       const modalDiv = document.createElement('div');
       modalDiv.className = 'modal-overlay';
-      modalDiv.innerHTML = `<div class="modal-box"><h3>📖 النص القرائي: ${testObj.title}</h3><div class="story-text">${story.replace(/\n/g, '<br>')}</div><div style="text-align:center"><button id="startQuizBtn" style="background:#2e7d64">📝 ابدأ الأسئلة</button><button id="cancelStoryBtn" class="secondary">إلغاء</button></div></div>`;
+      modalDiv.innerHTML = `<div class="modal-box"><h3>📖 النص القرائي: ${escapeHtml(testObj.title)}</h3><div class="story-text">${story.replace(/\n/g, '<br>')}</div><div style="text-align:center"><button id="startQuizBtn" style="background:#2e7d64">📝 ابدأ الأسئلة</button><button id="cancelStoryBtn" class="secondary">إلغاء</button></div></div>`;
       document.body.appendChild(modalDiv);
       document.getElementById('startQuizBtn').onclick = () => { modalDiv.remove(); renderTestQuestion(); };
       document.getElementById('cancelStoryBtn').onclick = () => { modalDiv.remove(); testActive=false; };
-    } else { renderTestQuestion(); }
+    } else {
+      renderTestQuestion();
+    }
   }
 
   function editStudentData() {
     const modalDiv = document.createElement('div');
     modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `<div class="modal-box" style="max-width:400px"><h3>✏️ تعديل بيانات الطالب</h3><div class="input-group" style="margin-bottom:12px"><label>👤 اسم الطالب</label><input type="text" id="editName" value="${student.name}"></div><div class="input-group" style="margin-bottom:20px"><label>📚 الصف</label><input type="text" id="editGrade" value="${student.grade}"></div><div style="display:flex; gap:12px; justify-content:center"><button id="saveEditBtn" style="background:#2e7d64">حفظ التغييرات</button><button id="cancelEditBtn" class="secondary">إلغاء</button></div></div>`;
+    modalDiv.innerHTML = `<div class="modal-box" style="max-width:400px"><h3>✏️ تعديل بيانات الطالب</h3><div class="input-group" style="margin-bottom:12px"><label>👤 اسم الطالب</label><input type="text" id="editName" value="${escapeHtml(student.name)}"></div><div class="input-group" style="margin-bottom:20px"><label>📚 الصف</label><input type="text" id="editGrade" value="${escapeHtml(student.grade)}"></div><div style="display:flex; gap:12px; justify-content:center"><button id="saveEditBtn" style="background:#2e7d64">حفظ التغييرات</button><button id="cancelEditBtn" class="secondary">إلغاء</button></div></div>`;
     document.body.appendChild(modalDiv);
-    document.getElementById('saveEditBtn').onclick = () => { const newName = document.getElementById('editName').value.trim(); const newGrade = document.getElementById('editGrade').value.trim(); if(newName) student.name = newName; if(newGrade) student.grade = newGrade; saveStudent(); updateBadge(); modalDiv.remove(); renderHome(); };
+    document.getElementById('saveEditBtn').onclick = () => {
+      const newName = document.getElementById('editName').value.trim();
+      const newGrade = document.getElementById('editGrade').value.trim();
+      if(newName) student.name = newName;
+      if(newGrade) student.grade = newGrade;
+      saveStudent(); updateBadge(); modalDiv.remove(); renderHome();
+    };
     document.getElementById('cancelEditBtn').onclick = () => modalDiv.remove();
   }
 
+  // ==================== التقارير (بدون دائرة) ====================
+  function showReportsWithChart() {
+    const myReports = reports.filter(r => r.studentName === student.name);
+    if (!myReports.length) { showCustomMessage("التقارير", "لا توجد تقارير بعد. قم بحل اختبار أولاً."); return; }
+    const mathReports = myReports.filter(r => r.subject === 'math');
+    const readingReports = myReports.filter(r => r.subject === 'reading');
+    const mathAvg = mathReports.length ? (mathReports.reduce((a,b)=>a+b.bestScore,0)/mathReports.length).toFixed(1) : 0;
+    const readAvg = readingReports.length ? (readingReports.reduce((a,b)=>a+b.bestScore,0)/readingReports.length).toFixed(1) : 0;
+    const totalAvg = (parseFloat(mathAvg) + parseFloat(readAvg)) / 2;
+    const mathPercentage = (mathAvg / 15) * 100;
+    const readPercentage = (readAvg / 15) * 100;
+    const overallPercentage = (totalAvg / 15) * 100;
+
+    let detailedHtml = `<div class="detailed-reports"><h4>📋 تفاصيل الاختبارات:</h4>`;
+    myReports.forEach(rep => {
+      const best = rep.bestScore;
+      const total = rep.bestTotal;
+      const timeSec = rep.bestTime;
+      const minutes = Math.floor(timeSec / 60);
+      const seconds = timeSec % 60;
+      const timeStr = `${toArabicIndic(minutes)}:${toArabicIndic(seconds.toString().padStart(2,'0'))}`;
+      detailedHtml += `
+        <div class="report-item">
+          <strong>${escapeHtml(rep.testTitle)}</strong>
+          <span>⭐ الدرجة: ${toArabicIndic(best)}/${toArabicIndic(total)}</span>
+          <span>⏱️ الزمن: ${timeStr}</span>
+          <span>📅 ${rep.attempts[rep.attempts.length-1].date}</span>
+        </div>
+      `;
+    });
+    detailedHtml += `</div>`;
+
+    const modalDiv = document.createElement('div');
+    modalDiv.className = 'modal-overlay';
+    modalDiv.innerHTML = `<div class="modal-box"><h3 style="text-align:center">📊 تقارير الطالب: ${escapeHtml(student.name)} (${escapeHtml(student.grade)})</h3><div class="flex-row"><div class="report-card"><h4>🧮 الرياضيات</h4><p>عدد الاختبارات: ${toArabicIndic(mathReports.length)}</p><p>متوسط الدرجة: ${toArabicIndic(mathAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(mathPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(mathReports.length * 15)}</p><a href="https://wa.me/+966540437287?text=${encodeURIComponent(`طالب: ${student.name}, درجات الرياضيات: متوسط ${mathAvg}/15 (${mathPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-icon">📱 معلم الرياضيات</a></div><div class="report-card"><h4>📖 القراءة</h4><p>عدد الاختبارات: ${toArabicIndic(readingReports.length)}</p><p>متوسط الدرجة: ${toArabicIndic(readAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(readPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(readingReports.length * 15)}</p><a href="https://wa.me/+966540312932?text=${encodeURIComponent(`طالب: ${student.name}, درجات القراءة: متوسط ${readAvg}/15 (${readPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-icon">📱 معلم لغتي</a></div></div><div class="chart-container"><canvas id="performanceBarChart"></canvas></div><div style="margin-top:16px; text-align:center; background:linear-gradient(135deg,#eef2fa,#e0e8f2); padding:12px; border-radius:28px"><strong>📈 متوسط الدرجات الإجمالي: ${toArabicIndic(totalAvg.toFixed(1))} / 15 (${toArabicIndic(overallPercentage.toFixed(1))}%)</strong></div>${detailedHtml}<button id="closeReport" class="secondary" style="margin-top:20px; width:100%">إغلاق</button></div>`;
+    document.body.appendChild(modalDiv);
+    setTimeout(() => {
+      const barCtx = document.getElementById('performanceBarChart')?.getContext('2d');
+      if(barCtx) {
+        new Chart(barCtx, { type: 'bar', data: { labels: ['الرياضيات', 'القراءة'], datasets: [{ label: 'متوسط الدرجة', data: [parseFloat(mathAvg), parseFloat(readAvg)], backgroundColor: ['#1E88E5', '#F9A825'], borderRadius: 12, barPercentage: 0.5 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${toArabicIndic(ctx.raw)} / 15` } } }, scales: { y: { beginAtZero: true, max: 15, title: { display: true, text: 'الدرجة' }, ticks: { callback: (val) => toArabicIndic(val) } } } } });
+      }
+    }, 100);
+    modalDiv.querySelector('#closeReport').onclick = () => modalDiv.remove();
+  }
+
+  // ==================== الصفحة الرئيسية ====================
   function renderHome() {
     const container = document.getElementById('dynamicContent');
     if (!student.name || !student.grade) {
-      container.innerHTML = `<div class="user-form"><div class="input-group"><label>👤 اسم الطالب</label><input type="text" id="stdName" placeholder="أحمد محمد"></div><div class="input-group"><label>📚 الصف</label><input type="text" id="stdGrade" placeholder="الثالث الابتدائي"></div><button class="save-btn" id="registerBtn">💾 تسجيل الدخول</button></div><div style="text-align:center; padding:20px">يرجى تسجيل بيانات الطالب لبدء الاختبارات</div>`;
+      container.innerHTML = `<div class="user-form"><div class="input-group"><label>👤 اسم الطالب</label><input type="text" id="stdName" placeholder="أحمد محمد"></div><div class="input-group"><label>📚 الصف</label><input type="text" id="stdGrade" placeholder="الثالث الابتدائي"></div><button class="save-btn" id="registerBtn">💾 تسجيل الدخول</button></div><div style="text-align:center; padding:16px">يرجى تسجيل بيانات الطالب لبدء الاختبارات</div>`;
       document.getElementById('registerBtn')?.addEventListener('click', () => {
         const name = document.getElementById('stdName').value.trim();
         const grade = document.getElementById('stdGrade').value.trim();
         if (!name) { showCustomMessage("تنبيه", "أدخل اسم الطالب"); return; }
         const confirmModal = document.createElement('div');
         confirmModal.className = 'modal-overlay';
-        confirmModal.innerHTML = `<div class="modal-box" style="max-width:450px; text-align:center"><h3>📢 توجيه هام</h3><p style="margin:20px 0">يُرجى من ولي الأمر التأكد من أن الطالب يؤدي الاختبار بنفسه دون مساعدة. <br>الاختبار يقيس المهارات الحقيقية.</p><div style="display:flex; gap:12px; justify-content:center"><button id="confirmAgree" style="background:#2e7d64">أوافق وأبدأ</button><button id="cancelModal" class="secondary">إلغاء</button></div></div>`;
+        confirmModal.innerHTML = `<div class="modal-box" style="max-width:450px; text-align:center"><h3>📢 توجيه هام</h3><p style="margin:16px 0">يُرجى من ولي الأمر التأكد من أن الطالب يؤدي الاختبار بنفسه دون مساعدة. <br>الاختبار يقيس المهارات الحقيقية.</p><div style="display:flex; gap:12px; justify-content:center"><button id="confirmAgree" style="background:#2e7d64">أوافق وأبدأ</button><button id="cancelModal" class="secondary">إلغاء</button></div></div>`;
         document.body.appendChild(confirmModal);
         document.getElementById('confirmAgree').onclick = () => { student.name = name; student.grade = grade || "الثالث الابتدائي"; saveStudent(); updateBadge(); confirmModal.remove(); renderHome(); };
         document.getElementById('cancelModal').onclick = () => confirmModal.remove();
@@ -374,40 +720,27 @@
     const allCompleted = isAllTestsCompleted();
     let testsHtml = `<h3>📋 اختبارات نافس المتاحة</h3><div class="tests-grid">`;
     allTests.forEach((test, idx) => {
-      const completed = isTestCompleted(test.id);
-      const disabled = !allCompleted && completed;
+      const best = getBestAttempt(test.id);
+      const completed = !!best;
+      const disabled = completed && !allCompleted;
       const cardClass = test.subject === 'math' ? `math-${idx%3+1}` : `reading-${idx%3+1}`;
-      testsHtml += `<div class="test-card ${cardClass} ${disabled ? 'disabled' : ''}" data-testid="${test.id}"><div class="test-icon">${test.subject === 'math' ? '📐' : '📖'}</div><div class="test-title">${test.title}</div><div class="subject-badge">${test.subject === 'math' ? 'رياضيات · 15 سؤال' : 'قراءة · نص + 15 سؤال'}</div>${completed ? '<div style="color:green">✓ تم الحل</div>' : ''}${disabled ? '<div style="color:#c24e00">🔒 مكتمل - انتظر باقي الاختبارات</div>' : ''}</div>`;
+      let content = '';
+      if (disabled) {
+        content = `<div class="lock-icon-large">🔒</div><div class="test-title">${escapeHtml(test.title)}</div><div class="subject-badge">${test.subject === 'math' ? 'رياضيات' : 'قراءة'}</div>`;
+      } else {
+        let scoreHtml = '';
+        if (completed) { scoreHtml = `<div class="test-score">⭐ ${best.score}/${best.total}</div>`; }
+        content = `<div class="test-icon">${test.subject === 'math' ? '📐' : '📖'}</div><div class="test-title">${escapeHtml(test.title)}</div><div class="subject-badge">${test.subject === 'math' ? 'رياضيات' : 'قراءة'}</div>${scoreHtml}`;
+      }
+      testsHtml += `<div class="test-card ${cardClass} ${disabled ? 'disabled' : ''} ${completed ? 'completed' : ''}" data-testid="${test.id}">${content}</div>`;
     });
     testsHtml += `</div><button class="reports-btn" id="showReportsBtn">📊 تقاريري وتحليلاتي</button>`;
     container.innerHTML = testsHtml;
-    document.querySelectorAll('.test-card:not(.disabled)').forEach(card => { card.addEventListener('click', () => { const testObj = allTests.find(t => t.id === card.dataset.testid); if(testObj) startTest(testObj); }); });
+    document.querySelectorAll('.test-card:not(.disabled)').forEach(card => {
+      card.addEventListener('click', () => { const testObj = allTests.find(t => t.id === card.dataset.testid); if(testObj) startTest(testObj); });
+    });
     document.getElementById('showReportsBtn')?.addEventListener('click', showReportsWithChart);
     document.getElementById('studentBadge')?.addEventListener('click', editStudentData);
-  }
-
-  function showReportsWithChart() {
-    const myReports = reports.filter(r => r.studentName === student.name);
-    if (!myReports.length) { showCustomMessage("التقارير", "لا توجد تقارير بعد. قم بحل اختبار أولاً."); return; }
-    const mathReports = myReports.filter(r => r.subject === 'math');
-    const readingReports = myReports.filter(r => r.subject === 'reading');
-    const mathAvg = mathReports.length ? (mathReports.reduce((a,b)=>a+b.score,0)/mathReports.length).toFixed(1) : 0;
-    const readAvg = readingReports.length ? (readingReports.reduce((a,b)=>a+b.score,0)/readingReports.length).toFixed(1) : 0;
-    const totalAvg = (parseFloat(mathAvg) + parseFloat(readAvg)) / 2;
-    const mathPercentage = (mathAvg / 15) * 100;
-    const readPercentage = (readAvg / 15) * 100;
-    const overallPercentage = (totalAvg / 15) * 100;
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `<div class="modal-box"><h3 style="text-align:center">📊 تقارير الطالب: ${student.name} (${student.grade})</h3><div class="flex-row"><div class="report-card"><h4>🧮 الرياضيات</h4><p>عدد الاختبارات: ${mathReports.length}</p><p>متوسط الدرجة: ${toArabicIndic(mathAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(mathPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(mathReports.length * 15)}</p><a href="https://wa.me/00966540437287?text=${encodeURIComponent(`طالب: ${student.name}, درجات الرياضيات: متوسط ${mathAvg}/15 (${mathPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-btn">📞 التواصل مع معلم الرياضيات</a></div><div class="report-card"><h4>📖 القراءة</h4><p>عدد الاختبارات: ${readingReports.length}</p><p>متوسط الدرجة: ${toArabicIndic(readAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(readPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(readingReports.length * 15)}</p><a href="https://wa.me/00966540312932?text=${encodeURIComponent(`طالب: ${student.name}, درجات القراءة: متوسط ${readAvg}/15 (${readPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-btn">📞 التواصل مع معلم لغتي</a></div></div><div class="chart-container"><canvas id="performanceBarChart"></canvas></div><div class="chart-container" style="height:250px"><canvas id="performanceDoughnutChart"></canvas></div><div style="margin-top:16px; text-align:center; background:linear-gradient(135deg,#eef2fa,#e0e8f2); padding:16px; border-radius:32px"><strong>📈 متوسط الدرجات الإجمالي: ${toArabicIndic(totalAvg.toFixed(1))} / 15 (${toArabicIndic(overallPercentage.toFixed(1))}%)</strong></div><button id="closeReport" class="secondary" style="margin-top:20px; width:100%">إغلاق</button></div>`;
-    document.body.appendChild(modalDiv);
-    setTimeout(() => {
-      const barCtx = document.getElementById('performanceBarChart')?.getContext('2d');
-      const doughnutCtx = document.getElementById('performanceDoughnutChart')?.getContext('2d');
-      if(barCtx) { new Chart(barCtx, { type: 'bar', data: { labels: ['الرياضيات', 'القراءة'], datasets: [{ label: 'متوسط الدرجة', data: [parseFloat(mathAvg), parseFloat(readAvg)], backgroundColor: ['#1E88E5', '#F9A825'], borderRadius: 12, barPercentage: 0.5 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${toArabicIndic(ctx.raw)} / 15` } } }, scales: { y: { beginAtZero: true, max: 15, title: { display: true, text: 'الدرجة' }, ticks: { callback: (val) => toArabicIndic(val) } } } } }); }
-      if(doughnutCtx) { new Chart(doughnutCtx, { type: 'doughnut', data: { labels: ['الرياضيات', 'القراءة'], datasets: [{ data: [mathPercentage, readPercentage], backgroundColor: ['#1E88E5', '#F9A825'], cutout: '60%' }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${toArabicIndic(ctx.raw.toFixed(1))}%` } }, legend: { position: 'bottom' } } } }); }
-    }, 100);
-    modalDiv.querySelector('#closeReport').onclick = () => modalDiv.remove();
   }
 
   loadData();

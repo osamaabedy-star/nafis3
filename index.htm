@@ -7,7 +7,7 @@
   <title>مدارس رياض الإبداع | الاختبارات الوطنية نافس</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    /* جميع الأنماط كما هي مع تحسينات بسيطة للزر */
+    /* جميع الأنماط كما هي بدون تغيير (محذوفة للاختصار، لكنها موجودة في الكود الأصلي) */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Tahoma', 'Cairo', system-ui, sans-serif; }
     body { background: linear-gradient(145deg, #eef2f7 0%, #dce3ec 100%); min-height: 100vh; padding: 20px 16px; transition: background 0.3s, color 0.3s; }
     body.dark-mode { background: #121212; color: #e0e0e0; }
@@ -98,7 +98,6 @@
     .detailed-reports { margin-top: 20px; border-top: 1px solid #ddd; padding-top: 16px; }
     .report-item { background: #fff; border-radius: 20px; padding: 8px 12px; margin-bottom: 8px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-size: 0.75rem; }
     body.dark-mode .report-item { background: #2a2a3a; }
-    /* أنماط المودال المحسنة للشرح */
     .info-modal-content { line-height: 1.6; }
     .info-modal-content h4 { margin: 12px 0 6px; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
     .info-modal-content ul { margin-right: 20px; margin-bottom: 12px; list-style-type: none; }
@@ -132,6 +131,7 @@
       </div>
     </div>
     <div class="main-content" id="dynamicContent"></div>
+    <div class="footer">أسامة إبراهيم / مدارس رياض الإبداع الأهلية 1447 هـ</div>
   </div>
 </div>
 
@@ -154,7 +154,7 @@
     applyDarkMode();
   });
 
-  // ==================== معلومات المنصة - تصميم احترافي ====================
+  // ==================== معلومات المنصة ====================
   document.getElementById('infoButton').addEventListener('click', () => {
     const modalDiv = document.createElement('div');
     modalDiv.className = 'modal-overlay';
@@ -187,7 +187,6 @@
     document.getElementById('closeInfoBtn').onclick = () => modalDiv.remove();
   });
 
-  // باقي الكود كما هو (لا تغيير في المنطق الأساسي)
   // ==================== الأمان والتطهير ====================
   function sanitizeText(str) {
     if (!str) return '';
@@ -431,7 +430,8 @@
   function removeExistingModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.remove()); currentModalDiv = null; }
 
   function showResultModal(score, total, timeTakenSec) {
-    const teacherPhone = currentTest.subject === 'math' ? "00966540437287" : "00966540312932";
+    // أرقام واتساب بالصيغة الدولية الصحيحة
+    const teacherPhone = currentTest.subject === 'math' ? "+966540437287" : "+966540312932";
     const minutes = Math.floor(timeTakenSec / 60);
     const seconds = timeTakenSec % 60;
     const timeStr = `${toArabicIndic(minutes)}:${toArabicIndic(seconds.toString().padStart(2,'0'))}`;
@@ -605,7 +605,7 @@
 
     const modalDiv = document.createElement('div');
     modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `<div class="modal-box"><h3 style="text-align:center">📊 تقارير الطالب: ${escapeHtml(student.name)} (${escapeHtml(student.grade)})</h3><div class="flex-row"><div class="report-card"><h4>🧮 الرياضيات</h4><p>عدد الاختبارات: ${toArabicIndic(mathReports.length)}</p><p>متوسط الدرجة: ${toArabicIndic(mathAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(mathPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(mathReports.length * 15)}</p><a href="https://wa.me/00966540437287?text=${encodeURIComponent(`طالب: ${student.name}, درجات الرياضيات: متوسط ${mathAvg}/15 (${mathPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-icon">📱 معلم الرياضيات</a></div><div class="report-card"><h4>📖 القراءة</h4><p>عدد الاختبارات: ${toArabicIndic(readingReports.length)}</p><p>متوسط الدرجة: ${toArabicIndic(readAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(readPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(readingReports.length * 15)}</p><a href="https://wa.me/00966540312932?text=${encodeURIComponent(`طالب: ${student.name}, درجات القراءة: متوسط ${readAvg}/15 (${readPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-icon">📱 معلم لغتي</a></div></div><div class="chart-container"><canvas id="performanceBarChart"></canvas></div><div style="margin-top:16px; text-align:center; background:linear-gradient(135deg,#eef2fa,#e0e8f2); padding:12px; border-radius:28px"><strong>📈 متوسط الدرجات الإجمالي: ${toArabicIndic(totalAvg.toFixed(1))} / 15 (${toArabicIndic(overallPercentage.toFixed(1))}%)</strong></div>${detailedHtml}<button id="closeReport" class="secondary" style="margin-top:20px; width:100%">إغلاق</button></div>`;
+    modalDiv.innerHTML = `<div class="modal-box"><h3 style="text-align:center">📊 تقارير الطالب: ${escapeHtml(student.name)} (${escapeHtml(student.grade)})</h3><div class="flex-row"><div class="report-card"><h4>🧮 الرياضيات</h4><p>عدد الاختبارات: ${toArabicIndic(mathReports.length)}</p><p>متوسط الدرجة: ${toArabicIndic(mathAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(mathPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(mathReports.length * 15)}</p><a href="https://wa.me/+966540437287?text=${encodeURIComponent(`طالب: ${student.name}, درجات الرياضيات: متوسط ${mathAvg}/15 (${mathPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-icon">📱 معلم الرياضيات</a></div><div class="report-card"><h4>📖 القراءة</h4><p>عدد الاختبارات: ${toArabicIndic(readingReports.length)}</p><p>متوسط الدرجة: ${toArabicIndic(readAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(readPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(readingReports.length * 15)}</p><a href="https://wa.me/+966540312932?text=${encodeURIComponent(`طالب: ${student.name}, درجات القراءة: متوسط ${readAvg}/15 (${readPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-icon">📱 معلم لغتي</a></div></div><div class="chart-container"><canvas id="performanceBarChart"></canvas></div><div style="margin-top:16px; text-align:center; background:linear-gradient(135deg,#eef2fa,#e0e8f2); padding:12px; border-radius:28px"><strong>📈 متوسط الدرجات الإجمالي: ${toArabicIndic(totalAvg.toFixed(1))} / 15 (${toArabicIndic(overallPercentage.toFixed(1))}%)</strong></div>${detailedHtml}<button id="closeReport" class="secondary" style="margin-top:20px; width:100%">إغلاق</button></div>`;
     document.body.appendChild(modalDiv);
     setTimeout(() => {
       const barCtx = document.getElementById('performanceBarChart')?.getContext('2d');

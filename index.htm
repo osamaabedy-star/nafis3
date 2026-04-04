@@ -168,7 +168,7 @@
   // معلومات المنصة
   document.getElementById('infoButton').addEventListener('click', () => {
     const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `<div class="modal-box"><h3 style="text-align:center;">📌 منصة نافس التفاعلية</h3><div style="margin:16px 0;"><strong>🎯 محاكاة الاختبارات الوطنية "نافس"</strong><br>قياس المهارات في الرياضيات والقراءة.</div><ul><li>6 اختبارات شاملة</li><li>مؤقت 25 دقيقة</li><li>تقارير مفصلة ورسوم بيانية</li><li>مراجعة الأسئلة بعد الاختبار</li><li>إرسال النتائج لمعلم المادة عبر واتساب</li></ul><button id="closeInfoBtn" class="secondary" style="display:block; margin:0 auto;">إغلاق</button></div>`;
+    modalDiv.innerHTML = `<div class="modal-box"><h3 style="text-align:center;">📌 منصة نافس التفاعلية</h3><div style="margin:16px 0;"><strong>🎯 محاكاة الاختبارات الوطنية "نافس"</strong><br>قياس المهارات في الرياضيات والقراءة.</div><ul><li>6 اختبارات شاملة</li><li>مؤقت 25 دقيقة</li><li>تقارير مفصلة ورسوم بيانية</li><li>مراجعة الأسئلة بعد الاختبار</li><li>إرسال النتائج لمعلم المادة عبر واتساب</li><li>تصميم أ/ أسامة إبراهيم / مدارس رياض الإبداع الأهلية 1447هـ</li></ul><button id="closeInfoBtn" class="secondary" style="display:block; margin:0 auto;">إغلاق</button></div>`;
     document.body.appendChild(modalDiv);
     document.getElementById('closeInfoBtn').onclick = () => modalDiv.remove();
   });
@@ -519,11 +519,11 @@
     if (!student.name || !student.name.trim() || !student.grade || !student.grade.trim()) {
       container.innerHTML = `
         <div class="register-prompt">
-          <h2>✨ مرحباً بك في منصة نافس ✨</h2>
-          <p style="margin-bottom: 20px; font-size: 1.1rem;">يرجى إدخال بيانات الطالب لبدء الاختبارات الوطنية</p>
+          <h2>✨ مرحباً بك في منصة نافس المحاكية ✨</h2>
+          <p style="margin-bottom: 20px; font-size: 1.1rem;">يرجى إدخال بيانات الطالب لبدء الاختبار المحاكي </p>
           <div class="input-group">
             <label style="display: block; margin-bottom: 8px; font-weight: bold;">👤 اسم الطالب (ثلاثي)</label>
-            <input type="text" id="regName" placeholder="مثال: أحمد محمد علي" style="width: 100%;">
+            <input type="text" id="regName" placeholder="مثال: ....." style="width: 100%;">
           </div>
           <div class="input-group">
             <label style="display: block; margin-bottom: 8px; font-weight: bold;">📚 الصف الدراسي</label>

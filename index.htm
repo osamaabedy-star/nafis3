@@ -547,7 +547,7 @@
     }
     // بعد التسجيل: عرض الاختبارات
     const allCompleted = isAllTestsCompleted();
-    let testsHtml = `<h3>📋 اختبارات نافس المتاحة</h3><div class="tests-grid">`;
+    let testsHtml = `<h3>📋 اختبارات نافس المحاكية المتاحة</h3><div class="tests-grid">`;
     allTests.forEach((test, idx) => {
       const best = getBestAttempt(test.id);
       const completed = !!best;

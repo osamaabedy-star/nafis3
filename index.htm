@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net https://www.wzufa.com; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self';">
   <title>مدارس رياض الإبداع | الاختبارات الوطنية نافس</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
@@ -14,11 +13,6 @@
     body.dark-mode .header { background: #0a1a24; }
     body.dark-mode .student-badge { background: #2c4b5a; }
     body.dark-mode .test-card { background: #2a2a3a; border-color: #3a3a4a; }
-    body.dark-mode .test-card.math-1, body.dark-mode .test-card.math-2, body.dark-mode .test-card.math-3,
-    body.dark-mode .test-card.reading-1, body.dark-mode .test-card.reading-2, body.dark-mode .test-card.reading-3 {
-      background: #2a2a3a;
-      border-right-color: #1E88E5;
-    }
     body.dark-mode .opt { background: #2a2a3a; border-color: #3a3a4a; color: #e0e0e0; }
     body.dark-mode .opt.selected { background: #1e4a3a; border-color: #2e7d64; }
     body.dark-mode .q-text { background: #2a2a3a; }
@@ -26,8 +20,7 @@
     body.dark-mode .modal-box { background: #1e1e2f; color: #e0e0e0; }
     body.dark-mode .story-text { background: #2a2a3a; }
     body.dark-mode .timer-bar { background: linear-gradient(135deg, #1e3a4a, #0a2a3a); }
-    body.dark-mode .info-bar { background: #2a2a3a; color: #e0e0e0; border-right-color: #f7b32b; }
-    body.dark-mode .review-item { background: #2a2a3a; border-bottom-color: #3a3a4a; }
+    body.dark-mode .review-item { background: #2a2a3a; }
     body.dark-mode .review-correct { background: #1a3a2a; }
     body.dark-mode .review-wrong { background: #3a2a2a; }
     .app-container { max-width: 950px; margin: 0 auto; }
@@ -41,41 +34,58 @@
     .dark-toggle { background: #3a6b7c; border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s; }
     .dark-toggle:hover { background: #4e8c9e; transform: scale(1.05); }
     .info-button { background: #f7b32b; color: #1e2a1e; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: inline-flex; align-items: center; justify-content: center; margin-left: 8px; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .info-button:hover { background: #ffc44d; transform: scale(1.05) rotate(2deg); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+    .info-button:hover { background: #ffc44d; transform: scale(1.05) rotate(2deg); }
     .main-content { padding: 20px; }
-    .user-form { background: #f8fafd; border-radius: 32px; padding: 16px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
-    body.dark-mode .user-form { background: #2a2a3a; }
-    .input-group { flex: 1; min-width: 120px; }
-    .input-group label { font-size: 0.7rem; font-weight: 600; color: #2c5a6e; margin-bottom: 4px; display: block; }
-    body.dark-mode .input-group label { color: #9bb8c9; }
-    .input-group input { width: 100%; padding: 10px 14px; border: 1px solid #cbdbe2; border-radius: 40px; font-size: 0.85rem; background: white; }
-    body.dark-mode .input-group input { background: #2a2a3a; border-color: #3a3a4a; color: #e0e0e0; }
-    .save-btn { background: #0b2b40; color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: bold; cursor: pointer; }
+    /* نموذج التسجيل المحسن */
+    .register-prompt {
+      background: #f0f7ff;
+      border-radius: 48px;
+      padding: 30px 24px;
+      text-align: center;
+      margin: 20px 0;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+    body.dark-mode .register-prompt { background: #2a2a3a; }
+    .register-prompt h2 { color: #0b2b40; margin-bottom: 20px; font-size: 1.6rem; }
+    body.dark-mode .register-prompt h2 { color: #ffd966; }
+    .register-prompt .input-group { margin-bottom: 20px; text-align: right; }
+    .register-prompt input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 60px;
+      border: 2px solid #cbd5e1;
+      font-size: 1rem;
+      background: white;
+    }
+    body.dark-mode .register-prompt input { background: #1e1e2f; border-color: #4a4a5a; color: white; }
+    .register-prompt button {
+      background: #0b2b40;
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 60px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
     .tests-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
-    .test-card { border-radius: 28px; padding: 8px 6px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.08); background: white; border: none; position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .test-card { border-radius: 28px; padding: 8px 6px; text-align: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.08); background: white; display: flex; flex-direction: column; align-items: center; gap: 4px; }
     .test-card.disabled { opacity: 0.7; filter: grayscale(0.1); cursor: not-allowed; pointer-events: none; background: #e9ecef; }
-    body.dark-mode .test-card.disabled { background: #3a3a4a; }
     .test-card.completed { border: 1px solid #2e7d64; }
-    .test-card:hover:not(.disabled) { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.12); }
     .test-card.math-1 { background: linear-gradient(135deg, #E8F0FE, #D9E6FF); border-right: 4px solid #1E88E5; }
     .test-card.math-2 { background: linear-gradient(135deg, #E0F7FA, #B2EBF2); border-right: 4px solid #00ACC1; }
     .test-card.math-3 { background: linear-gradient(135deg, #F3E5F5, #E1BEE7); border-right: 4px solid #8E24AA; }
     .test-card.reading-1 { background: linear-gradient(135deg, #FFF8E7, #FFE9BF); border-right: 4px solid #F9A825; }
     .test-card.reading-2 { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); border-right: 4px solid #43A047; }
     .test-card.reading-3 { background: linear-gradient(135deg, #FFEBEE, #FFCDD2); border-right: 4px solid #E53935; }
-    body.dark-mode .test-card.math-1, body.dark-mode .test-card.math-2, body.dark-mode .test-card.math-3,
-    body.dark-mode .test-card.reading-1, body.dark-mode .test-card.reading-2, body.dark-mode .test-card.reading-3 {
-      background: #2a2a3a;
-      border-right-color: #1E88E5;
-    }
     .test-icon { font-size: 1.6rem; margin-bottom: 2px; }
     .test-title { font-weight: 700; font-size: 0.75rem; margin: 2px 0; }
-    .subject-badge { display: inline-block; border-radius: 30px; padding: 2px 6px; font-size: 0.6rem; margin-top: 2px; background: rgba(0,0,0,0.05); }
+    .subject-badge { display: inline-block; border-radius: 30px; padding: 2px 6px; font-size: 0.6rem; background: rgba(0,0,0,0.05); }
     .test-score { font-size: 0.65rem; font-weight: bold; color: #2e7d64; margin-top: 3px; }
     .lock-icon-large { font-size: 1.8rem; margin-bottom: 4px; display: block; }
     button { background: #0b2b40; border: none; padding: 8px 16px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
     button:hover { opacity: 0.9; transform: scale(1.02); }
-    button.secondary { background: #b0bed0; color: #1f2a3a; }
     .reports-btn { background: #f7b32b; color: #1e2a1e; margin-top: 12px; width: 100%; font-size: 0.9rem; }
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 16px; }
     .modal-box { background: white; max-width: 800px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 20px; border-radius: 36px; box-shadow: 0 30px 40px rgba(0,0,0,0.3); }
@@ -83,54 +93,31 @@
     .timer-bar { background: linear-gradient(135deg, #0b2b40, #1f4e5c); color: white; padding: 10px; border-radius: 50px; text-align: center; font-size: 1.4rem; font-weight: bold; margin-bottom: 16px; direction: ltr; }
     .q-text { font-size: 0.95rem; font-weight: 700; background: #f3f6fc; padding: 12px; border-radius: 24px; margin-bottom: 16px; }
     .options { display: flex; flex-direction: column; gap: 8px; }
-    .opt { background: #f8fafc; padding: 8px 12px; border-radius: 50px; border: 1px solid #e2edf2; cursor: pointer; transition: all 0.1s ease; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+    .opt { background: #f8fafc; padding: 8px 12px; border-radius: 50px; border: 1px solid #e2edf2; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
     .opt.selected { background: #e5f6e5; border-color: #2e7d64; }
     .opt-prefix { font-weight: 800; width: 24px; height: 24px; background: #dee4ec; border-radius: 40px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; }
     .nav-btns { display: flex; justify-content: space-between; margin-top: 20px; gap: 12px; }
     .big-score { font-size: 2rem; font-weight: 800; color: #0b2b40; margin: 12px 0; }
     .chart-container { max-width: 100%; margin: 20px 0; height: 260px; position: relative; }
-    .report-card { background: #f8fafd; border-radius: 24px; padding: 12px; margin-bottom: 16px; flex: 1; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    .report-card { background: #f8fafd; border-radius: 24px; padding: 12px; margin-bottom: 16px; flex: 1; }
     .flex-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
     .whatsapp-icon { background: #25D366; display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 40px; color: white; text-decoration: none; font-size: 0.7rem; margin-top: 6px; }
     .footer { text-align: center; font-size: 0.7rem; padding: 16px; color: #5f7f8f; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 8px; }
-    body.dark-mode .footer { color: #9bb8c9; border-top-color: #3a3a4a; }
+    .review-list { display: flex; flex-direction: column; gap: 20px; margin: 20px 0; }
+    .review-item { background: #f9fafc; border-radius: 24px; padding: 16px; border-right: 6px solid; }
+    .review-correct { border-right-color: #2e7d64; background: #f0faf5; }
+    .review-wrong { border-right-color: #d32f2f; background: #fff5f5; }
+    .review-question { font-weight: 700; font-size: 0.9rem; margin-bottom: 12px; }
+    .review-answer { font-size: 0.85rem; margin-top: 8px; padding: 8px; border-radius: 16px; }
+    .review-student-answer { background: #e8f0fe; margin-bottom: 6px; }
+    .review-correct-answer { background: #e6f4ea; }
     .fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 2px; }
     .fraction .num { border-bottom: 1px solid #000; padding: 0 4px; }
     .fraction .den { padding: 0 4px; }
-    .detailed-reports { margin-top: 20px; border-top: 1px solid #ddd; padding-top: 16px; }
-    .report-item { background: #fff; border-radius: 20px; padding: 8px 12px; margin-bottom: 8px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-size: 0.75rem; }
-    body.dark-mode .report-item { background: #2a2a3a; }
-    .info-modal-content { line-height: 1.6; }
-    .info-modal-content h4 { margin: 12px 0 6px; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
-    .info-modal-content ul { margin-right: 20px; margin-bottom: 12px; list-style-type: none; }
-    .info-modal-content li { margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-    .info-modal-content .highlight { background: #f0f0f0; border-radius: 16px; padding: 8px 12px; margin: 12px 0; text-align: center; }
-    body.dark-mode .info-modal-content .highlight { background: #2a2a3a; }
-    /* أنماط المراجعة الجديدة */
-    .review-list { display: flex; flex-direction: column; gap: 20px; margin: 20px 0; }
-    .review-item { background: #f9fafc; border-radius: 24px; padding: 16px; border-right: 6px solid; transition: 0.2s; }
-    .review-correct { border-right-color: #2e7d64; background: #f0faf5; }
-    .review-wrong { border-right-color: #d32f2f; background: #fff5f5; }
-    body.dark-mode .review-correct { background: #1a3a2a; border-right-color: #4caf50; }
-    body.dark-mode .review-wrong { background: #3a2a2a; border-right-color: #f44336; }
-    .review-question { font-weight: 700; font-size: 0.9rem; margin-bottom: 12px; }
-    .review-answer { font-size: 0.85rem; margin-top: 8px; padding: 8px; border-radius: 16px; }
-    .review-answer strong { font-weight: 700; }
-    .review-student-answer { background: #e8f0fe; margin-bottom: 6px; }
-    .review-correct-answer { background: #e6f4ea; }
-    body.dark-mode .review-student-answer { background: #2a3a5a; }
-    body.dark-mode .review-correct-answer { background: #1a3a2a; }
-    .review-status { display: inline-block; font-size: 0.75rem; margin-right: 8px; }
     @media (max-width: 600px) {
       .modal-box { padding: 16px; }
-      .timer-bar { font-size: 1.2rem; }
       .test-card { padding: 6px 4px; }
-      .test-icon { font-size: 1.4rem; }
-      .test-title { font-size: 0.7rem; }
-      .subject-badge { font-size: 0.55rem; }
-      .lock-icon-large { font-size: 1.6rem; }
-      .report-item { flex-direction: column; align-items: flex-start; gap: 4px; }
-      .review-item { padding: 12px; }
+      .register-prompt { padding: 20px 16px; }
     }
   </style>
 </head>
@@ -154,7 +141,7 @@
 </div>
 
 <script>
-  // ==================== التحقق من توفر localStorage ====================
+  // التحقق من localStorage
   function isLocalStorageAvailable() {
     try { const testKey = '__storage_test__'; localStorage.setItem(testKey, 'test'); localStorage.removeItem(testKey); return true; } catch(e) { return false; }
   }
@@ -168,7 +155,7 @@
     document.body.prepend(warningDiv);
   }
 
-  // ==================== الوضع الليلي ====================
+  // الوضع الليلي
   let darkMode = localStorage.getItem('darkMode') === 'true';
   function applyDarkMode() {
     if (darkMode) { document.body.classList.add('dark-mode'); document.getElementById('darkModeToggle').innerHTML = '☀️'; } 
@@ -178,22 +165,22 @@
   applyDarkMode();
   document.getElementById('darkModeToggle').addEventListener('click', () => { darkMode = !darkMode; applyDarkMode(); });
 
-  // ==================== معلومات المنصة ====================
+  // معلومات المنصة
   document.getElementById('infoButton').addEventListener('click', () => {
     const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `<div class="modal-box" style="max-width: 550px;"><div class="info-modal-content"><h3 style="text-align:center; margin-bottom:16px;">📌 منصة نافس التفاعلية</h3><div class="highlight"><strong>🎯 منصة محاكاة الاختبارات الوطنية "نافس"</strong><br>قياس المهارات الحقيقية في الرياضيات والقراءة وفق معايير وطنية.</div><h4>✨ المميزات:</h4><ul><li>📚 <strong>6 اختبارات شاملة</strong> (3 رياضيات + 3 قراءة)</li><li>⏱️ <strong>مؤقت زمني 25 دقيقة</strong> لكل اختبار</li><li>📊 <strong>تقارير مفصلة</strong> مع رسوم بيانية وتحليل الأداء</li><li>🔁 <strong>إعادة الاختبارات</strong> بعد إتمام جميع الاختبارات</li><li>🌙 <strong>وضع ليلي</strong> مريح للعين</li><li>🔍 <strong>مراجعة الأسئلة بعد كل اختبار</strong> (عرض جميع الأسئلة دفعة واحدة)</li><li>📱 <strong>إرسال النتائج لمعلم المادة عبر واتساب</strong></li></ul><h4>👨‍💻 المطور:</h4><p style="margin-right: 20px;">أسامة إبراهيم – مدارس رياض الإبداع الأهلية<br>العام الدراسي 1447 هـ</p><div style="text-align:center; margin-top:20px;"><button id="closeInfoBtn" class="secondary">إغلاق</button></div></div></div>`;
+    modalDiv.innerHTML = `<div class="modal-box"><h3 style="text-align:center;">📌 منصة نافس التفاعلية</h3><div style="margin:16px 0;"><strong>🎯 محاكاة الاختبارات الوطنية "نافس"</strong><br>قياس المهارات في الرياضيات والقراءة.</div><ul><li>6 اختبارات شاملة</li><li>مؤقت 25 دقيقة</li><li>تقارير مفصلة ورسوم بيانية</li><li>مراجعة الأسئلة بعد الاختبار</li><li>إرسال النتائج لمعلم المادة عبر واتساب</li></ul><button id="closeInfoBtn" class="secondary" style="display:block; margin:0 auto;">إغلاق</button></div>`;
     document.body.appendChild(modalDiv);
     document.getElementById('closeInfoBtn').onclick = () => modalDiv.remove();
   });
 
-  // ==================== دوال مساعدة ====================
+  // دوال مساعدة
   function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
   function toArabicIndic(num) { const digits = '٠١٢٣٤٥٦٧٨٩'; return num.toString().replace(/\d/g, d => digits[parseInt(d)]); }
   function convertNumbersToArabicIndic(text) { if (!text) return text; return text.replace(/\d+/g, match => toArabicIndic(match)); }
   function formatFractions(text) { return text.replace(/(\d+)\/(\d+)/g, (match, num, den) => `<span class="fraction"><span class="num">${toArabicIndic(num)}</span><span class="den">${toArabicIndic(den)}</span></span>`); }
 
-  // ==================== بنك الأسئلة (نفس الكود السابق، مختصر للطول) ====================
-  const MATH_BANK = [
+  // ========== بنك الأسئلة (تم إصلاح الرياضيات لـ 45 سؤالاً) ==========
+  const MATH_BASE = [
     { text: "ما اسم الشكل الهندسي الذي له 6 أوجه مربعة؟", options: ["مكعب", "مربع", "أسطوانة", "مستطيل"], correct: 0 },
     { text: "رسمت أمل مربعًا طول ضلعه 2 سم، ما مساحته؟", options: ["8 سم²", "4 سم²", "2 سم²", "12 سم²"], correct: 1 },
     { text: "حديقة مستطيلة طولها 9 م وعرضها 4 م، كم محيطها؟", options: ["36 م", "26 م", "12 م", "13 م"], correct: 1 },
@@ -218,22 +205,26 @@
     { text: "أي جملة عددية تمثل (235-149)؟", options: ["384=149+235", "86=149-235", "86=235-149", "47=5÷235"], correct: 2 },
     { text: "محيط مربع طول ضلعه 5 سم:", options: ["20 سم", "25 سم", "10 سم", "15 سم"], correct: 0 },
     { text: "ناتج 72 ÷ 8 =", options: ["8", "9", "7", "10"], correct: 1 },
-    { text: "أي الكسور أكبر: 2/3 أم 2/5؟", options: ["2/3", "2/5", "متساويان", "لا يمكن"], correct: 0 }
-  ];
-  const MATH_EXTRA = [
+    { text: "أي الكسور أكبر: 2/3 أم 2/5؟", options: ["2/3", "2/5", "متساويان", "لا يمكن"], correct: 0 },
     { text: "إذا كان 3×□ = 21، فما قيمة □؟", options: ["6", "7", "8", "9"], correct: 1 },
     { text: "أي عمليات التحقق من 9×5=45؟", options: ["9=5÷45", "5=9÷45", "45÷5=9", "45-5=40"], correct: 2 },
     { text: "الشكل ثلاثي الأبعاد له 6 أوجه مستطيلة:", options: ["مكعب", "متوازي مستطيلات", "هرم", "أسطوانة"], correct: 1 }
   ];
-  const FULL_MATH = [...MATH_BANK, ...MATH_EXTRA].slice(0, 60);
+  // توسيع البنك إلى 45 سؤالاً بالضبط
+  function expandBank(bank, targetSize) {
+    const expanded = [...bank];
+    while (expanded.length < targetSize) expanded.push(...bank.slice(0, targetSize - expanded.length));
+    return expanded.slice(0, targetSize);
+  }
+  const FULL_MATH = expandBank(MATH_BASE, 45);
 
+  // نصوص القراءة
   const READING_TEXTS = {
     "قراءة - اختبار 1": `الحمامتان والسلحفاة\nيُحكى أنّ حمامتين جميلتين قرّرتا السفر والابتعاد عن الغدير الذي عاشتا إلى جانبه طويلاً بسبب شح الماء فيه، فحزنت صديقتهما السلحفاة وطلبت منهما أن تأخذاها معهما، فأجابتها الحمامتان بأنها لا تستطيع الطيران. بكت السلحفاة كثيراً وتوسلت إليهما بأن تجدا طريقة لنقلها معهما، فكرت الحمامتان كثيراً وقررتا حملها معهما، فأحضرتا عوداً قوياً أمسكت كل واحدة منهما به من طرف وطلبتا من السلحفاة أن تعض على هذا العود حتى تطيرا بها، وحذرتاها من أن تفتح فمها مهما كلّف الأمر؛ لأن ذلك سيؤدي إلى سقوطها. وافقت السلحفاة على ذلك ووعدتهما بأن تنفذ ما طلبتاه منها، وطارت الحمامتان فوق الغابة، إلى أن رأى بعض الناس الحمامتين والسلحفاة فقالوا: يا للعجب حمامتان تحملان سلحفاة وتطيران بها! لم تستطع السلحفاة تمالك نفسها فقالت: فقاً الله أعينكم ما دخلكم أنتم؟! فسقطت بعد أن أفلتت العود من فمها وتكسرت أضلعها وقالت باكية: هذه هي نتيجة كثرة الكلام وعدم الوفاء بالوعد.`,
     "قراءة - اختبار 2": `أبو الكيمياء جابر بن حيان\nهو أبو عبدالله جابر بن حيان الكوفي، كان والده صيدلانياً، مارس هذه المهنة مدة طويلة؛ فكان عمله دافعاً لشغف جابر. كتب عدداً كبيراً من الكتب في علوم مختلفة، وله العديد من الاختراعات؛ فهو أول من حضر ماء الذهب، وأول من صنع المواد التي تعزل البلل عن الثياب. وعمل في تركيب العطور والأدوية، وتطوير صناعة الإناء والمصابيح والمرايا المزخرفة بالفسيفساء الإسلامية. كما برع في صناعة أنواع من الحبر الملون الذي لا تمحوه النار، بل تزيده وضوحاً وبريقاً وثباتاً. وتلبيةً لطلب أستاذه، اخترع نوعاً من الورق لا تؤثر فيه النار، استغرق ذلك منه وقتاً طويلاً، إذ كان يمكث في مختبره منكباً على إجراء التجارب الدقيقة على أنواع من الأوراق، يصنعها في محاليل خاصة ويصب عليها في كل مرة خليطاً من السوائل التي ابتكرها، ثم يدعها حتى تجف، إلى أن توصل إلى اختراع الورق المقاوم للنار. وذات يوم، بينما كان أستاذه جالساً في بيته ومعه عدد كبير من ضيوفه وتلاميذه يحتفلون بتهنئة الأستاذ بسبب تأليف كتاب ضخم، دخل عليه جابر حاملاً بين يديه نسخة أخرى من الكتاب مغلفة بغلاف جميل مزين بالفسيفساء الإسلامية، ثم فاجأ الحاضرين بإلقاء النسخة في موقد النار، فصدرت من الجميع صرخات الاستنكار، وأسرع بعضهم لإنقاذ الكتاب من النار، إلا أن جابراً أخرجه من النار سليماً، وكانت النار لم تمسسه. حقاً إن جابر بن حيان عبقري من عباقرة العرب والمسلمين الذين نبغوا في علم لم يشتهر فيه أحد قبلهم.`,
     "قراءة - اختبار 3": `نظافة البحار والمحيطات\nخرج خالد مع والده في رحلة إلى شاطئ البحر، كان البحر هادئاً، والأمواج تتلاطم بلطف. بينما كان خالد يتأمل روعة البحر وجماله، رأى أسرة ترمي بقايا الطعام والأكياس البلاستيكية في مياه البحر. تعجب خالد من هذا المشهد وقال: "يا للعجب! كيف يرمون النفايات في البحر؟" أجاب والده بحزن: "هذا تصرف خاطئ، إن التلوث يضر بالكائنات البحرية ويؤثر على جمال البحر ونقائه. لقد سخّر الله لنا البحر وما فيه من خيرات، علينا أن نحافظ عليه. ولذلك قامت حكومتنا الرشيدة بحملات توعوية وقوانين صارمة للحفاظ على البيئة البحرية." أشار الأب إلى أن التلوث يسبب موت الأسماك وتكاثر البكتيريا الضارة، كما يفقد البحر رونقه وجماله. يجب علينا جميعاً المحافظة على نظافة الشواطئ والبحار، والإبلاغ عن المخالفين. شعر خالد بالحزن لما رآه، وعاهد نفسه أن يكون حريصاً على نظافة البيئة البحرية.`
   };
-
-  const READING_BANK_TEXT1 = [
+  const READING_Q1 = [
     { text: "مرادف كلمة (شُحَّ) في نص الحمامتان:", options: ["كثرة", "قلة", "خرير", "سخاء"], correct: 1 },
     { text: "ضد كلمة (شُحَّ):", options: ["بخل", "سخاء", "إمساك", "حرص"], correct: 1 },
     { text: "معنى كلمة (غدير):", options: ["البحر", "البحيرة", "النهر الصغير", "جدول"], correct: 2 },
@@ -250,8 +241,7 @@
     { text: "من طلب من الحمامتين أن تأخذاها معهما؟", options: ["السلحفاة", "الناس", "الطيور", "السمكة"], correct: 0 },
     { text: "كيف حملت الحمامتان السلحفاة؟", options: ["عضت على عود", "على الظهر", "بالجناح", "بالمنقار"], correct: 0 }
   ];
-
-  const READING_BANK_TEXT2 = [
+  const READING_Q2 = [
     { text: "مرادف (تعزل) من نص جابر:", options: ["تحجب", "تكر", "تتجل", "تقل"], correct: 0 },
     { text: "معنى (اخترع):", options: ["شاهد", "تاجر", "ابتكر", "تناقش"], correct: 2 },
     { text: "لماذا اخترع جابر ورقاً لا تحرقه النار؟", options: ["طلب أستاذه", "مفاجأة", "خوفًا على الكتب", "كل ما ذكر"], correct: 0 },
@@ -268,8 +258,7 @@
     { text: "لماذا كان أستاذ جابر سعيداً؟", options: ["تأليف كتاب", "اختراع دواء", "سفر", "زواج"], correct: 0 },
     { text: "صفة من صفات جابر بن حيان:", options: ["العلم والعبقرية", "الغضب", "السرعة", "الخوف"], correct: 0 }
   ];
-
-  const READING_BANK_TEXT3 = [
+  const READING_Q3 = [
     { text: "الهدف من قصة نظافة البحار:", options: ["الحياة الفطرية", "المحافظة على نظافة البحار", "حياة الأسماك", "الصيد"], correct: 1 },
     { text: "شعور خالد عند رؤية النفايات:", options: ["بالحزن", "بالخوف", "بالوحدة", "بالفرح"], correct: 0 },
     { text: "ماذا كانت تفعل الأسرة على الشاطئ؟", options: ["ترمي النفايات", "تسبح", "تلعب", "تصطاد"], correct: 0 },
@@ -286,10 +275,9 @@
     { text: "ما نوع النفايات التي رمتها الأسرة؟", options: ["بلاستيك وطعام", "زجاج", "ورق", "معادن"], correct: 0 },
     { text: "مشهد رمي النفايات جعل خالداً يشعر بـ:", options: ["الحزن والتعجب", "الفرح", "الغضب", "الخوف"], correct: 0 }
   ];
+  const FULL_READING = [...READING_Q1, ...READING_Q2, ...READING_Q3];
 
-  const FULL_READING = [...READING_BANK_TEXT1, ...READING_BANK_TEXT2, ...READING_BANK_TEXT3];
-
-  function buildTests(bank, subject, count = 3, titlePrefix, storyMap = null) {
+  function buildTests(bank, subject, count, titlePrefix, storyMap) {
     const tests = [];
     for (let i = 0; i < count; i++) {
       const start = i * 15;
@@ -308,11 +296,11 @@
     }
     return tests;
   }
-  const mathTests = buildTests(FULL_MATH, 'math', 3, 'رياضيات');
+  const mathTests = buildTests(FULL_MATH, 'math', 3, 'رياضيات', null);
   const readingTests = buildTests(FULL_READING, 'reading', 3, 'قراءة', READING_TEXTS);
   const allTests = [...mathTests, ...readingTests];
 
-  // ==================== إدارة التخزين ====================
+  // إدارة التخزين
   let student = { name: "", grade: "" };
   let reports = [];
 
@@ -330,9 +318,8 @@
 
   function getBestAttempt(testId) {
     const report = reports.find(r => r.testId === testId && r.studentName === student.name);
-    return report ? { score: report.bestScore, total: report.bestTotal, time: report.bestTime, attempts: report.attempts } : null;
+    return report ? { score: report.bestScore, total: report.bestTotal, time: report.bestTime } : null;
   }
-
   function updateBestAttempt(testId, score, total, timeTakenSeconds) {
     const existingIndex = reports.findIndex(r => r.testId === testId && r.studentName === student.name);
     const attempt = { score, total, time: timeTakenSeconds, date: new Date().toLocaleString('ar-SA') };
@@ -347,10 +334,12 @@
     }
     saveReports();
   }
-
   function isTestCompleted(testId) { return getBestAttempt(testId) !== null; }
   function isAllTestsCompleted() { return allTests.every(t => isTestCompleted(t.id)); }
-  function updateBadge() { const badge = document.getElementById('studentBadge'); if(badge) badge.textContent = `👨‍🎓 ${student.name || "غير مسجل"}  |  ${student.grade || "الثالث"}`; }
+  function updateBadge() { 
+    const badge = document.getElementById('studentBadge'); 
+    if(badge) badge.textContent = `👨‍🎓 ${student.name || "غير مسجل"}  |  ${student.grade || "الثالث"}`; 
+  }
   function showCustomMessage(title, message, onConfirm = null) {
     const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay';
     modalDiv.innerHTML = `<div class="modal-box" style="max-width:400px; text-align:center"><h3>${escapeHtml(title)}</h3><p style="margin:16px 0">${escapeHtml(message)}</p><button id="msgConfirmBtn" style="background:#2e7d64">حسنًا</button></div>`;
@@ -358,49 +347,33 @@
     document.getElementById('msgConfirmBtn').onclick = () => { modalDiv.remove(); if(onConfirm) onConfirm(); };
   }
 
-  let audioCtx = null;
-  function playBeep(type = 'correct') {
-    try {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.frequency.value = type === 'correct' ? 880 : 440;
-      gain.gain.value = 0.2;
-      osc.start();
-      gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
-      osc.stop(audioCtx.currentTime + 0.3);
-    } catch(e) { console.warn("Audio not supported"); }
-  }
-
-  // ==================== نظام الاختبار ====================
+  // نظام الاختبار
   let currentTest = null, currentAnswers = [], currentQIndex = 0;
-  let timerInterval = null, startTime = null, timeLeftSeconds = 25 * 60;
+  let timerInterval = null, startTime = null, timeLeftSeconds = 25*60;
   let testActive = false;
   let currentModalDiv = null;
-
   function stopTimer() { if(timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
-  function formatTime(sec) { const mins = Math.floor(sec / 60); const remainSec = sec % 60; return `${toArabicIndic(mins)}:${toArabicIndic(remainSec.toString().padStart(2,'0'))}`; }
-  function updateTimerDisplay() { if(currentModalDiv) { const timerElem = currentModalDiv.querySelector('#timerDisplay'); if(timerElem) timerElem.innerText = formatTime(timeLeftSeconds); } }
+  function formatTime(sec) { const mins = Math.floor(sec/60); const remainSec = sec%60; return `${toArabicIndic(mins)}:${toArabicIndic(remainSec.toString().padStart(2,'0'))}`; }
+  function updateTimerDisplay() { if(currentModalDiv) { const t = currentModalDiv.querySelector('#timerDisplay'); if(t) t.innerText = formatTime(timeLeftSeconds); } }
   function startTimer() {
     startTime = Date.now();
     if(timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
       if(!testActive) return;
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const elapsed = Math.floor((Date.now() - startTime)/1000);
       timeLeftSeconds = Math.max(0, 25*60 - elapsed);
       updateTimerDisplay();
       if(timeLeftSeconds <= 0) { stopTimer(); if(testActive) finishTest(true); }
     }, 1000);
   }
-
-  function finishTest(isAuto = false) {
+  function finishTest() {
     if(!testActive) return;
     testActive = false;
     stopTimer();
     let score = 0;
     currentTest.questions.forEach((q, idx) => { if(currentAnswers[idx] === q.correct) score++; });
     const total = currentTest.questions.length;
-    const timeTaken = Math.min(25*60, Math.floor((Date.now() - startTime) / 1000));
+    const timeTaken = Math.min(25*60, Math.floor((Date.now() - startTime)/1000));
     updateBestAttempt(currentTest.id, score, total, timeTaken);
     const questionsCopy = [...currentTest.questions];
     const answersCopy = [...currentAnswers];
@@ -408,194 +381,100 @@
     removeExistingModals();
     showResultModal(score, total, timeTaken, questionsCopy, answersCopy, testTitleCopy);
   }
-
   function removeExistingModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.remove()); currentModalDiv = null; }
-
-  // دالة عرض النتيجة مع زر المراجعة
   function showResultModal(score, total, timeTakenSec, questions, userAnswers, testTitle) {
     const teacherPhone = currentTest.subject === 'math' ? "+966540437287" : "+966540312932";
-    const minutes = Math.floor(timeTakenSec / 60);
-    const seconds = timeTakenSec % 60;
+    const minutes = Math.floor(timeTakenSec/60), seconds = timeTakenSec%60;
     const timeStr = `${toArabicIndic(minutes)}:${toArabicIndic(seconds.toString().padStart(2,'0'))}`;
     const percent = Math.round(score/total*100);
     const msg = `الطالب: ${student.name}\nالاختبار: ${testTitle}\nالدرجة: ${score}/${total} (${percent}%)\nالزمن: ${timeStr}`;
     const whatsappLink = `https://wa.me/${teacherPhone}?text=${encodeURIComponent(msg)}`;
-    const resultModal = document.createElement('div');
-    resultModal.className = 'modal-overlay';
-    resultModal.innerHTML = `
-      <div class="modal-box" style="text-align:center">
-        <h2>🏆 نتيجة الاختبار</h2>
-        <div class="big-score">${toArabicIndic(score)} / ${toArabicIndic(total)}</div>
-        <p>نسبة الإنجاز: ${toArabicIndic(percent)}%</p>
-        <p>⏱️ الزمن المستغرق: ${timeStr}</p>
-        <div style="margin:16px 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
-          <a href="${whatsappLink}" target="_blank" class="whatsapp-icon">📱 واتساب المعلم</a>
-          <button id="reviewBtn" style="background:#0b2b40">🔍 مراجعة الأسئلة (جميعها)</button>
-        </div>
-        <button id="closeResultBtn" class="secondary">إغلاق</button>
-      </div>
-    `;
+    const resultModal = document.createElement('div'); resultModal.className = 'modal-overlay';
+    resultModal.innerHTML = `<div class="modal-box" style="text-align:center"><h2>🏆 نتيجة الاختبار</h2><div class="big-score">${toArabicIndic(score)} / ${toArabicIndic(total)}</div><p>نسبة الإنجاز: ${toArabicIndic(percent)}%</p><p>⏱️ الزمن: ${timeStr}</p><div style="margin:16px 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap"><a href="${whatsappLink}" target="_blank" class="whatsapp-icon">📱 واتساب المعلم</a><button id="reviewBtn" style="background:#0b2b40">🔍 مراجعة الأسئلة</button></div><button id="closeResultBtn" class="secondary">إغلاق</button></div>`;
     document.body.appendChild(resultModal);
     document.getElementById('closeResultBtn').onclick = () => { resultModal.remove(); renderHome(); };
-    document.getElementById('reviewBtn').onclick = () => {
-      resultModal.remove();
-      showFullReviewModal(questions, userAnswers, testTitle);
-    };
+    document.getElementById('reviewBtn').onclick = () => { resultModal.remove(); showFullReviewModal(questions, userAnswers, testTitle); };
   }
-
-  // دالة مراجعة الأسئلة بشكل قائمة واحدة (جميع الأسئلة دفعة واحدة)
   function showFullReviewModal(questions, userAnswers, testTitle) {
-    let reviewHtml = `<div class="modal-box"><h3 style="text-align:center; margin-bottom:16px;">📖 مراجعة جميع الأسئلة: ${escapeHtml(testTitle)}</h3><div class="review-list">`;
-    
-    for (let i = 0; i < questions.length; i++) {
+    let reviewHtml = `<div class="modal-box"><h3 style="text-align:center;">📖 مراجعة جميع الأسئلة: ${escapeHtml(testTitle)}</h3><div class="review-list">`;
+    for (let i=0; i<questions.length; i++) {
       const q = questions[i];
-      const userChoice = userAnswers[i];
-      const isCorrect = (userChoice === q.correct);
-      const correctAnswerText = q.options[q.correct];
-      const userAnswerText = (userChoice !== null && userChoice !== undefined) ? q.options[userChoice] : "لم يتم الإجابة";
+      const isCorrect = (userAnswers[i] === q.correct);
+      const correctAns = q.options[q.correct];
+      const userAns = (userAnswers[i]!==null && userAnswers[i]!==undefined) ? q.options[userAnswers[i]] : "لم يتم الإجابة";
       const statusClass = isCorrect ? 'review-correct' : 'review-wrong';
       const statusIcon = isCorrect ? '✔️ صحيحة' : '❌ خاطئة';
-      
-      reviewHtml += `
-        <div class="review-item ${statusClass}">
-          <div class="review-question">
-            <span style="font-weight:800; margin-left:8px;">${toArabicIndic(i+1)}.</span>
-            ${q.text}
-          </div>
-          <div class="review-answer review-student-answer">
-            <strong>✅ إجابتك:</strong> ${escapeHtml(userAnswerText)}
-            <span class="review-status">${statusIcon}</span>
-          </div>
-          <div class="review-answer review-correct-answer">
-            <strong>📌 الإجابة الصحيحة:</strong> ${escapeHtml(correctAnswerText)}
-          </div>
-        </div>
-      `;
+      reviewHtml += `<div class="review-item ${statusClass}"><div class="review-question"><span style="font-weight:800; margin-left:8px;">${toArabicIndic(i+1)}.</span> ${q.text}</div><div class="review-answer review-student-answer"><strong>✅ إجابتك:</strong> ${escapeHtml(userAns)} <span class="review-status">${statusIcon}</span></div><div class="review-answer review-correct-answer"><strong>📌 الإجابة الصحيحة:</strong> ${escapeHtml(correctAns)}</div></div>`;
     }
-    
     reviewHtml += `</div><div style="text-align:center; margin-top:20px;"><button id="closeReviewBtn" class="secondary">إغلاق</button></div></div>`;
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = reviewHtml;
+    const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay'; modalDiv.innerHTML = reviewHtml;
     document.body.appendChild(modalDiv);
     document.getElementById('closeReviewBtn').onclick = () => { modalDiv.remove(); renderHome(); };
   }
-
   function updateCurrentQuestion() {
     if(!currentModalDiv || !currentTest) return;
     const q = currentTest.questions[currentQIndex];
     const selectedIdx = currentAnswers[currentQIndex];
     let optsHtml = '';
-    q.options.forEach((opt, idx) => {
-      const isSel = (selectedIdx === idx);
-      optsHtml += `<div class="opt ${isSel ? 'selected' : ''}" data-optidx="${idx}"><div class="opt-prefix">${String.fromCharCode(65+idx)}</div><div>${opt}</div></div>`;
-    });
-    const qTextDiv = currentModalDiv.querySelector('.q-text');
-    const optionsDiv = currentModalDiv.querySelector('.options');
-    const qCounterSpan = currentModalDiv.querySelector('.q-counter');
-    if(qTextDiv) qTextDiv.innerHTML = q.text;
-    if(optionsDiv) optionsDiv.innerHTML = optsHtml;
-    if(qCounterSpan) qCounterSpan.innerHTML = `السؤال ${toArabicIndic(currentQIndex+1)} / ${toArabicIndic(currentTest.questions.length)}`;
+    q.options.forEach((opt, idx) => { optsHtml += `<div class="opt ${selectedIdx===idx ? 'selected' : ''}" data-optidx="${idx}"><div class="opt-prefix">${String.fromCharCode(65+idx)}</div><div>${opt}</div></div>`; });
+    currentModalDiv.querySelector('.q-text').innerHTML = q.text;
+    currentModalDiv.querySelector('.options').innerHTML = optsHtml;
+    currentModalDiv.querySelector('.q-counter').innerHTML = `السؤال ${toArabicIndic(currentQIndex+1)} / ${toArabicIndic(currentTest.questions.length)}`;
     currentModalDiv.querySelectorAll('.opt').forEach(opt => {
-      opt.addEventListener('click', (e) => {
+      opt.addEventListener('click', () => {
         if(!testActive) return;
         const idx = parseInt(opt.dataset.optidx);
-        if (currentAnswers[currentQIndex] !== idx) {
-          currentAnswers[currentQIndex] = idx;
-          playBeep('correct');
-          updateCurrentQuestion();
-        }
+        if (currentAnswers[currentQIndex] !== idx) { currentAnswers[currentQIndex] = idx; updateCurrentQuestion(); }
       });
     });
   }
-
   function renderTestQuestion() {
     if(!testActive || !currentTest) return;
     if(currentModalDiv) { updateCurrentQuestion(); return; }
     const q = currentTest.questions[currentQIndex];
-    const selectedIdx = currentAnswers[currentQIndex];
     let optsHtml = '';
-    q.options.forEach((opt, idx) => {
-      const isSel = (selectedIdx === idx);
-      optsHtml += `<div class="opt ${isSel ? 'selected' : ''}" data-optidx="${idx}"><div class="opt-prefix">${String.fromCharCode(65+idx)}</div><div>${opt}</div></div>`;
-    });
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `
-      <div class="modal-box">
-        <div class="timer-bar" style="direction:ltr">⏱️ الوقت المتبقي: <span id="timerDisplay">${formatTime(timeLeftSeconds)}</span></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:10px">
-          <span>${escapeHtml(currentTest.title)}</span>
-          <span class="q-counter">السؤال ${toArabicIndic(currentQIndex+1)} / ${toArabicIndic(currentTest.questions.length)}</span>
-        </div>
-        <div class="q-text">${q.text}</div>
-        <div class="options" id="testOptions">${optsHtml}</div>
-        <div class="nav-btns">
-          <button id="prevQ" class="secondary" ${currentQIndex===0 ? 'disabled' : ''}>السابق</button>
-          <button id="nextQ">${currentQIndex === currentTest.questions.length-1 ? 'إنهاء' : 'التالي'}</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modalDiv);
-    currentModalDiv = modalDiv;
-    if(!timerInterval) startTimer();
-    else updateTimerDisplay();
-
+    q.options.forEach((opt, idx) => { optsHtml += `<div class="opt" data-optidx="${idx}"><div class="opt-prefix">${String.fromCharCode(65+idx)}</div><div>${opt}</div></div>`; });
+    const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay';
+    modalDiv.innerHTML = `<div class="modal-box"><div class="timer-bar">⏱️ الوقت المتبقي: <span id="timerDisplay">${formatTime(timeLeftSeconds)}</span></div><div style="display:flex; justify-content:space-between;"><span>${escapeHtml(currentTest.title)}</span><span class="q-counter">السؤال ${toArabicIndic(currentQIndex+1)} / ${toArabicIndic(currentTest.questions.length)}</span></div><div class="q-text">${q.text}</div><div class="options">${optsHtml}</div><div class="nav-btns"><button id="prevQ" class="secondary" ${currentQIndex===0 ? 'disabled' : ''}>السابق</button><button id="nextQ">${currentQIndex === currentTest.questions.length-1 ? 'إنهاء' : 'التالي'}</button></div></div>`;
+    document.body.appendChild(modalDiv); currentModalDiv = modalDiv;
+    if(!timerInterval) startTimer(); else updateTimerDisplay();
     currentModalDiv.querySelectorAll('.opt').forEach(opt => {
-      opt.addEventListener('click', (e) => {
+      opt.addEventListener('click', () => {
         if(!testActive) return;
         const idx = parseInt(opt.dataset.optidx);
-        if (currentAnswers[currentQIndex] !== idx) {
-          currentAnswers[currentQIndex] = idx;
-          playBeep('correct');
-          updateCurrentQuestion();
-        }
+        if (currentAnswers[currentQIndex] !== idx) { currentAnswers[currentQIndex] = idx; updateCurrentQuestion(); }
       });
     });
-    currentModalDiv.querySelector('#prevQ')?.addEventListener('click', () => {
-      if(testActive && currentQIndex>0){ currentQIndex--; updateCurrentQuestion(); }
-    });
+    currentModalDiv.querySelector('#prevQ')?.addEventListener('click', () => { if(testActive && currentQIndex>0){ currentQIndex--; updateCurrentQuestion(); } });
     currentModalDiv.querySelector('#nextQ')?.addEventListener('click', () => {
       if(!testActive) return;
-      if (currentAnswers[currentQIndex] === null) {
-        showCustomMessage("تنبيه", "الرجاء اختيار إجابة قبل المتابعة.");
-        playBeep('wrong');
-        return;
-      }
+      if (currentAnswers[currentQIndex] === null) { showCustomMessage("تنبيه", "الرجاء اختيار إجابة قبل المتابعة."); return; }
       if (currentQIndex === currentTest.questions.length-1) finishTest();
       else { currentQIndex++; updateCurrentQuestion(); }
     });
   }
-
   function startTest(testObj) {
+    if (!testObj.questions || testObj.questions.length === 0) { showCustomMessage("خطأ", "هذا الاختبار لا يحتوي على أسئلة كافية."); return; }
     const completed = isTestCompleted(testObj.id);
     const allDone = isAllTestsCompleted();
-    if(completed && !allDone) {
-      showCustomMessage("⚠️ الاختبار مقفل", "لقد أنهيت هذا الاختبار مسبقاً. لا يمكن إعادته إلا بعد الانتهاء من جميع الاختبارات الستة.");
-      return;
-    }
+    if(completed && !allDone) { showCustomMessage("⚠️ الاختبار مقفل", "لا يمكن إعادته إلا بعد الانتهاء من جميع الاختبارات الستة."); return; }
     currentTest = testObj;
     currentAnswers = new Array(testObj.questions.length).fill(null);
     currentQIndex = 0;
-    timeLeftSeconds = 25 * 60;
+    timeLeftSeconds = 25*60;
     testActive = true;
     if(testObj.subject === 'reading' && testObj.storyText) {
       const story = testObj.storyText;
-      const modalDiv = document.createElement('div');
-      modalDiv.className = 'modal-overlay';
+      const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay';
       modalDiv.innerHTML = `<div class="modal-box"><h3>📖 النص القرائي: ${escapeHtml(testObj.title)}</h3><div class="story-text">${story.replace(/\n/g, '<br>')}</div><div style="text-align:center"><button id="startQuizBtn" style="background:#2e7d64">📝 ابدأ الأسئلة</button><button id="cancelStoryBtn" class="secondary">إلغاء</button></div></div>`;
       document.body.appendChild(modalDiv);
       document.getElementById('startQuizBtn').onclick = () => { modalDiv.remove(); renderTestQuestion(); };
       document.getElementById('cancelStoryBtn').onclick = () => { modalDiv.remove(); testActive=false; };
-    } else {
-      renderTestQuestion();
-    }
+    } else { renderTestQuestion(); }
   }
-
   function editStudentData() {
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `<div class="modal-box" style="max-width:400px"><h3>✏️ تعديل بيانات الطالب</h3><div class="input-group" style="margin-bottom:12px"><label>👤 اسم الطالب</label><input type="text" id="editName" value="${escapeHtml(student.name)}"></div><div class="input-group" style="margin-bottom:20px"><label>📚 الصف</label><input type="text" id="editGrade" value="${escapeHtml(student.grade)}"></div><div style="display:flex; gap:12px; justify-content:center"><button id="saveEditBtn" style="background:#2e7d64">حفظ التغييرات</button><button id="cancelEditBtn" class="secondary">إلغاء</button></div></div>`;
+    const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay';
+    modalDiv.innerHTML = `<div class="modal-box"><h3>✏️ تعديل بيانات الطالب</h3><div class="input-group"><label>👤 اسم الطالب</label><input type="text" id="editName" value="${escapeHtml(student.name)}"></div><div class="input-group"><label>📚 الصف</label><input type="text" id="editGrade" value="${escapeHtml(student.grade)}"></div><div style="display:flex; gap:12px; margin-top:20px;"><button id="saveEditBtn" style="background:#2e7d64">حفظ</button><button id="cancelEditBtn" class="secondary">إلغاء</button></div></div>`;
     document.body.appendChild(modalDiv);
     document.getElementById('saveEditBtn').onclick = () => {
       const newName = document.getElementById('editName').value.trim();
@@ -606,8 +485,6 @@
     };
     document.getElementById('cancelEditBtn').onclick = () => modalDiv.remove();
   }
-
-  // ==================== التقارير ====================
   function showReportsWithChart() {
     const myReports = reports.filter(r => r.studentName === student.name);
     if (!myReports.length) { showCustomMessage("التقارير", "لا توجد تقارير بعد. قم بحل اختبار أولاً."); return; }
@@ -618,51 +495,57 @@
     const totalAvg = (parseFloat(mathAvg) + parseFloat(readAvg)) / 2;
     const mathPercentage = (mathAvg / 15) * 100;
     const readPercentage = (readAvg / 15) * 100;
-    const overallPercentage = (totalAvg / 15) * 100;
-
     let detailedHtml = `<div class="detailed-reports"><h4>📋 تفاصيل الاختبارات:</h4>`;
     myReports.forEach(rep => {
-      const best = rep.bestScore;
-      const total = rep.bestTotal;
-      const timeSec = rep.bestTime;
-      const minutes = Math.floor(timeSec / 60);
-      const seconds = timeSec % 60;
-      const timeStr = `${toArabicIndic(minutes)}:${toArabicIndic(seconds.toString().padStart(2,'0'))}`;
-      detailedHtml += `<div class="report-item"><strong>${escapeHtml(rep.testTitle)}</strong><span>⭐ الدرجة: ${toArabicIndic(best)}/${toArabicIndic(total)}</span><span>⏱️ الزمن: ${timeStr}</span><span>📅 ${rep.attempts[rep.attempts.length-1].date}</span></div>`;
+      const best = rep.bestScore, total = rep.bestTotal;
+      const minutes = Math.floor(rep.bestTime/60), seconds = rep.bestTime%60;
+      detailedHtml += `<div class="report-item"><strong>${escapeHtml(rep.testTitle)}</strong><span>⭐ ${toArabicIndic(best)}/${toArabicIndic(total)}</span><span>⏱️ ${toArabicIndic(minutes)}:${toArabicIndic(seconds.toString().padStart(2,'0'))}</span><span>📅 ${rep.attempts[rep.attempts.length-1].date}</span></div>`;
     });
     detailedHtml += `</div>`;
-
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-overlay';
-    modalDiv.innerHTML = `<div class="modal-box"><h3 style="text-align:center">📊 تقارير الطالب: ${escapeHtml(student.name)} (${escapeHtml(student.grade)})</h3><div class="flex-row"><div class="report-card"><h4>🧮 الرياضيات</h4><p>عدد الاختبارات: ${toArabicIndic(mathReports.length)}</p><p>متوسط الدرجة: ${toArabicIndic(mathAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(mathPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(mathReports.length * 15)}</p><a href="https://wa.me/+966540437287?text=${encodeURIComponent(`طالب: ${student.name}, درجات الرياضيات: متوسط ${mathAvg}/15 (${mathPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-icon">📱 معلم الرياضيات</a></div><div class="report-card"><h4>📖 القراءة</h4><p>عدد الاختبارات: ${toArabicIndic(readingReports.length)}</p><p>متوسط الدرجة: ${toArabicIndic(readAvg)} / 15</p><p>نسبة الإنجاز: ${toArabicIndic(readPercentage.toFixed(1))}%</p><p>إجمالي الأسئلة: ${toArabicIndic(readingReports.length * 15)}</p><a href="https://wa.me/+966540312932?text=${encodeURIComponent(`طالب: ${student.name}, درجات القراءة: متوسط ${readAvg}/15 (${readPercentage.toFixed(1)}%)`)}" target="_blank" class="whatsapp-icon">📱 معلم لغتي</a></div></div><div class="chart-container"><canvas id="performanceBarChart"></canvas></div><div style="margin-top:16px; text-align:center; background:linear-gradient(135deg,#eef2fa,#e0e8f2); padding:12px; border-radius:28px"><strong>📈 متوسط الدرجات الإجمالي: ${toArabicIndic(totalAvg.toFixed(1))} / 15 (${toArabicIndic(overallPercentage.toFixed(1))}%)</strong></div>${detailedHtml}<button id="closeReport" class="secondary" style="margin-top:20px; width:100%">إغلاق</button></div>`;
+    const modalDiv = document.createElement('div'); modalDiv.className = 'modal-overlay';
+    modalDiv.innerHTML = `<div class="modal-box"><h3 style="text-align:center">📊 تقارير الطالب: ${escapeHtml(student.name)} (${escapeHtml(student.grade)})</h3><div class="flex-row"><div class="report-card"><h4>🧮 الرياضيات</h4><p>عدد الاختبارات: ${toArabicIndic(mathReports.length)}</p><p>المتوسط: ${toArabicIndic(mathAvg)} / 15</p><p>النسبة: ${toArabicIndic(mathPercentage.toFixed(1))}%</p><a href="https://wa.me/+966540437287?text=${encodeURIComponent(`طالب: ${student.name}, متوسط الرياضيات: ${mathAvg}/15`)}" target="_blank" class="whatsapp-icon">📱 معلم الرياضيات</a></div><div class="report-card"><h4>📖 القراءة</h4><p>عدد الاختبارات: ${toArabicIndic(readingReports.length)}</p><p>المتوسط: ${toArabicIndic(readAvg)} / 15</p><p>النسبة: ${toArabicIndic(readPercentage.toFixed(1))}%</p><a href="https://wa.me/+966540312932?text=${encodeURIComponent(`طالب: ${student.name}, متوسط القراءة: ${readAvg}/15`)}" target="_blank" class="whatsapp-icon">📱 معلم لغتي</a></div></div><div class="chart-container"><canvas id="perfChart"></canvas></div><div style="text-align:center; margin:16px 0; background:#eef2fa; padding:12px; border-radius:28px"><strong>📈 الإجمالي: ${toArabicIndic(totalAvg.toFixed(1))} / 15 (${toArabicIndic(((totalAvg/15)*100).toFixed(1))}%)</strong></div>${detailedHtml}<button id="closeReport" class="secondary" style="width:100%">إغلاق</button></div>`;
     document.body.appendChild(modalDiv);
     setTimeout(() => {
-      const barCtx = document.getElementById('performanceBarChart')?.getContext('2d');
-      if(barCtx) {
-        new Chart(barCtx, { type: 'bar', data: { labels: ['الرياضيات', 'القراءة'], datasets: [{ label: 'متوسط الدرجة', data: [parseFloat(mathAvg), parseFloat(readAvg)], backgroundColor: ['#1E88E5', '#F9A825'], borderRadius: 12, barPercentage: 0.5 }] }, options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `${toArabicIndic(ctx.raw)} / 15` } } }, scales: { y: { beginAtZero: true, max: 15, title: { display: true, text: 'الدرجة' }, ticks: { callback: (val) => toArabicIndic(val) } } } } });
-      }
+      const ctx = document.getElementById('perfChart')?.getContext('2d');
+      if(ctx) new Chart(ctx, { type: 'bar', data: { labels: ['الرياضيات', 'القراءة'], datasets: [{ label: 'متوسط الدرجة', data: [parseFloat(mathAvg), parseFloat(readAvg)], backgroundColor: ['#1E88E5', '#F9A825'], borderRadius: 12 }] }, options: { responsive: true, scales: { y: { beginAtZero: true, max: 15, ticks: { callback: (v) => toArabicIndic(v) } } } } });
     }, 100);
     modalDiv.querySelector('#closeReport').onclick = () => modalDiv.remove();
   }
 
-  // ==================== الصفحة الرئيسية ====================
+  // الصفحة الرئيسية - مع نموذج تسجيل محسن جداً
   function renderHome() {
     const container = document.getElementById('dynamicContent');
-    if (!student.name || !student.grade) {
-      container.innerHTML = `<div class="user-form"><div class="input-group"><label>👤 اسم الطالب</label><input type="text" id="stdName" placeholder="أحمد محمد"></div><div class="input-group"><label>📚 الصف</label><input type="text" id="stdGrade" placeholder="الثالث الابتدائي"></div><button class="save-btn" id="registerBtn">💾 تسجيل الدخول</button></div><div style="text-align:center; padding:16px">يرجى تسجيل بيانات الطالب لبدء الاختبارات</div>`;
-      document.getElementById('registerBtn')?.addEventListener('click', () => {
-        const name = document.getElementById('stdName').value.trim();
-        const grade = document.getElementById('stdGrade').value.trim();
-        if (!name) { showCustomMessage("تنبيه", "أدخل اسم الطالب"); return; }
-        const confirmModal = document.createElement('div');
-        confirmModal.className = 'modal-overlay';
-        confirmModal.innerHTML = `<div class="modal-box" style="max-width:450px; text-align:center"><h3>📢 توجيه هام</h3><p style="margin:16px 0">يُرجى من ولي الأمر التأكد من أن الطالب يؤدي الاختبار بنفسه دون مساعدة. <br>الاختبار يقيس المهارات الحقيقية.</p><div style="display:flex; gap:12px; justify-content:center"><button id="confirmAgree" style="background:#2e7d64">أوافق وأبدأ</button><button id="cancelModal" class="secondary">إلغاء</button></div></div>`;
+    // إذا لم يتم تسجيل الدخول (الاسم فارغ أو الصف فارغ)
+    if (!student.name || !student.name.trim() || !student.grade || !student.grade.trim()) {
+      container.innerHTML = `
+        <div class="register-prompt">
+          <h2>✨ مرحباً بك في منصة نافس ✨</h2>
+          <p style="margin-bottom: 20px; font-size: 1.1rem;">يرجى إدخال بيانات الطالب لبدء الاختبارات الوطنية</p>
+          <div class="input-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: bold;">👤 اسم الطالب (ثلاثي)</label>
+            <input type="text" id="regName" placeholder="مثال: أحمد محمد علي" style="width: 100%;">
+          </div>
+          <div class="input-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: bold;">📚 الصف الدراسي</label>
+            <input type="text" id="regGrade" placeholder="مثال: الثالث الابتدائي" style="width: 100%;">
+          </div>
+          <button id="doRegisterBtn">🚀 بدء الاختبارات</button>
+        </div>
+      `;
+      document.getElementById('doRegisterBtn')?.addEventListener('click', () => {
+        const name = document.getElementById('regName').value.trim();
+        const grade = document.getElementById('regGrade').value.trim();
+        if (!name) { showCustomMessage("تنبيه", "الرجاء إدخال اسم الطالب."); return; }
+        if (!grade) { showCustomMessage("تنبيه", "الرجاء إدخال الصف."); return; }
+        const confirmModal = document.createElement('div'); confirmModal.className = 'modal-overlay';
+        confirmModal.innerHTML = `<div class="modal-box" style="text-align:center"><h3>📢 توجيه هام</h3><p style="margin:16px 0">يُرجى من ولي الأمر التأكد من أن الطالب يؤدي الاختبار بنفسه دون مساعدة.<br>الاختبار يقيس المهارات الحقيقية.</p><div style="display:flex; gap:12px; justify-content:center"><button id="confirmOk" style="background:#2e7d64">أوافق وأبدأ</button><button id="confirmCancel" class="secondary">إلغاء</button></div></div>`;
         document.body.appendChild(confirmModal);
-        document.getElementById('confirmAgree').onclick = () => { student.name = name; student.grade = grade || "الثالث الابتدائي"; saveStudent(); updateBadge(); confirmModal.remove(); renderHome(); };
-        document.getElementById('cancelModal').onclick = () => confirmModal.remove();
+        document.getElementById('confirmOk').onclick = () => { student.name = name; student.grade = grade; saveStudent(); updateBadge(); confirmModal.remove(); renderHome(); };
+        document.getElementById('confirmCancel').onclick = () => confirmModal.remove();
       });
       return;
     }
+    // بعد التسجيل: عرض الاختبارات
     const allCompleted = isAllTestsCompleted();
     let testsHtml = `<h3>📋 اختبارات نافس المتاحة</h3><div class="tests-grid">`;
     allTests.forEach((test, idx) => {
@@ -675,7 +558,7 @@
         content = `<div class="lock-icon-large">🔒</div><div class="test-title">${escapeHtml(test.title)}</div><div class="subject-badge">${test.subject === 'math' ? 'رياضيات' : 'قراءة'}</div>`;
       } else {
         let scoreHtml = '';
-        if (completed) { scoreHtml = `<div class="test-score">⭐ ${best.score}/${best.total}</div>`; }
+        if (completed) scoreHtml = `<div class="test-score">⭐ ${best.score}/${best.total}</div>`;
         content = `<div class="test-icon">${test.subject === 'math' ? '📐' : '📖'}</div><div class="test-title">${escapeHtml(test.title)}</div><div class="subject-badge">${test.subject === 'math' ? 'رياضيات' : 'قراءة'}</div>${scoreHtml}`;
       }
       testsHtml += `<div class="test-card ${cardClass} ${disabled ? 'disabled' : ''} ${completed ? 'completed' : ''}" data-testid="${test.id}">${content}</div>`;
@@ -683,7 +566,7 @@
     testsHtml += `</div><button class="reports-btn" id="showReportsBtn">📊 تقاريري وتحليلاتي</button>`;
     container.innerHTML = testsHtml;
     document.querySelectorAll('.test-card:not(.disabled)').forEach(card => {
-      card.addEventListener('click', () => { const testObj = allTests.find(t => t.id === card.dataset.testid); if(testObj) startTest(testObj); });
+      card.addEventListener('click', () => { const t = allTests.find(tc => tc.id === card.dataset.testid); if(t) startTest(t); });
     });
     document.getElementById('showReportsBtn')?.addEventListener('click', showReportsWithChart);
     document.getElementById('studentBadge')?.addEventListener('click', editStudentData);
